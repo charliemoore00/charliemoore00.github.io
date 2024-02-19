@@ -7,16 +7,16 @@
     "text": "Blog for Spring 2024, Machine Learning CSCI0451"
   },
   {
-    "objectID": "posts/new-test-post/index.html",
-    "href": "posts/new-test-post/index.html",
-    "title": "Second Post",
+    "objectID": "posts/penguins-blog-post/index.html",
+    "href": "posts/penguins-blog-post/index.html",
+    "title": "Penguins Blog",
     "section": "",
-    "text": "from source import Perceptron\np = Perceptron()\n\nI did it!!\nnot implemented\nThis is an example of the blog posts that you’ll submit as your primary form of learning demonstration in CSCI 0451. I created this post by modifying the file posts/example-blog-post/index.ipynb in VSCode. You can also use JupyterLab for this editing if you prefer. Finally, it is possible to write blog posts without using notebooks by writing .qmd files, as illustrated here."
+    "text": "import pandas as pd\ntrain_url = “https://raw.githubusercontent.com/PhilChodrow/ml-notes/main/data/palmer-penguins/train.csv” train = pd.read_csv(train_url)\nHere’s how the penguin data looks:\ntrain.head()\nWe’ll have lots of opportunities to make data visualizations in this course. These also display inside the notebook, and get converted into your blog post:\nfrom matplotlib import pyplot as plt\nimport numpy as np\n\nx = np.linspace(0, 2*np.pi, 1001)\ny = np.sin(x)\nfig = plt.plot(x, y)\nxlab = plt.xlabel(\"x\")\nylab = plt.ylabel(\"y\")\ntitle = plt.gca().set(title = \"My Fancy Plot\")\nAnother thing we’ll often do is implement an algorithm in a source file (i.e. a .py file) and then use it in a notebook. To do this, just place the .py file in the same directory as the notebook. For example, the file source.py in the same directory contains a custom function (which prints a message). I can use like this:\nimport source \nsource.my_custom_function()\nsource.my_custom_function()\n\nI implemented this function in the file source.py\nI implemented this function in the file source.py"
   },
   {
-    "objectID": "posts/new-test-post/index.html#math",
-    "href": "posts/new-test-post/index.html#math",
-    "title": "Second Post",
+    "objectID": "posts/penguins-blog-post/index.html#math",
+    "href": "posts/penguins-blog-post/index.html#math",
+    "title": "Penguins Blog",
     "section": "Math",
     "text": "Math\nIn addition to regular text using the Markdown specification, you can also write mathematics, enclosed between dollar signs. The syntax for writing math is very similar to the syntax used in the \\(\\LaTeX\\) markup language. For example, $f(x) \\approx y$ renders to \\(f(x) \\approx y\\). To place complex mathematical expressions on their own lines, use double dollar signs. For example, the expression\n$$\\mathcal{L}(a, b) = \\sum_{i = 1}^n (ax_i + b - y_i)^2$$\nrenders to:\n\\[\\mathcal{L}(a, b) = \\sum_{i = 1}^n (ax_i + b - y_i)^2\\;.\\]\nBehind the scenes, math is powered by the MathJax engine. For more on how to write math, check this handy tutorial and quick reference."
   },
@@ -35,10 +35,24 @@
     "text": "Math\nIn addition to regular text using the Markdown specification, you can also write mathematics, enclosed between dollar signs. The syntax for writing math is very similar to the syntax used in the \\(\\LaTeX\\) markup language. For example, $f(x) \\approx y$ renders to \\(f(x) \\approx y\\). To place complex mathematical expressions on their own lines, use double dollar signs. For example, the expression\n$$\\mathcal{L}(a, b) = \\sum_{i = 1}^n (ax_i + b - y_i)^2$$\nrenders to:\n\\[\\mathcal{L}(a, b) = \\sum_{i = 1}^n (ax_i + b - y_i)^2\\;.\\]\nBehind the scenes, math is powered by the MathJax engine. For more on how to write math, check this handy tutorial and quick reference."
   },
   {
+    "objectID": "posts/new-test-post/index.html",
+    "href": "posts/new-test-post/index.html",
+    "title": "Second Post",
+    "section": "",
+    "text": "from source import Perceptron\np = Perceptron()\n\nI did it!!\nnot implemented\nThis is an example of the blog posts that you’ll submit as your primary form of learning demonstration in CSCI 0451. I created this post by modifying the file posts/example-blog-post/index.ipynb in VSCode. You can also use JupyterLab for this editing if you prefer. Finally, it is possible to write blog posts without using notebooks by writing .qmd files, as illustrated here."
+  },
+  {
+    "objectID": "posts/new-test-post/index.html#math",
+    "href": "posts/new-test-post/index.html#math",
+    "title": "Second Post",
+    "section": "Math",
+    "text": "Math\nIn addition to regular text using the Markdown specification, you can also write mathematics, enclosed between dollar signs. The syntax for writing math is very similar to the syntax used in the \\(\\LaTeX\\) markup language. For example, $f(x) \\approx y$ renders to \\(f(x) \\approx y\\). To place complex mathematical expressions on their own lines, use double dollar signs. For example, the expression\n$$\\mathcal{L}(a, b) = \\sum_{i = 1}^n (ax_i + b - y_i)^2$$\nrenders to:\n\\[\\mathcal{L}(a, b) = \\sum_{i = 1}^n (ax_i + b - y_i)^2\\;.\\]\nBehind the scenes, math is powered by the MathJax engine. For more on how to write math, check this handy tutorial and quick reference."
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "My Awesome CSCI 0451 Blog",
     "section": "",
-    "text": "Second Post\n\n\n\n\n\nA new blog post that I just made!\n\n\n\n\n\nMar 10, 2023\n\n\nPhil Chodrow\n\n\n\n\n\n\n\n\n\n\n\n\nHello Blog\n\n\n\n\n\nAn example blog post illustrating the key techniques you’ll need to demonstrate your learning in CSCI 0451.\n\n\n\n\n\nJan 10, 2023\n\n\nPhil Chodrow\n\n\n\n\n\n\nNo matching items"
+    "text": "Penguins Blog\n\n\n\n\n\nPalmer Penguins!\n\n\n\n\n\nFeb 19, 2024\n\n\nCharlie Moore\n\n\n\n\n\n\n\n\n\n\n\n\nSecond Post\n\n\n\n\n\nA new blog post that I just made!\n\n\n\n\n\nMar 10, 2023\n\n\nPhil Chodrow\n\n\n\n\n\n\n\n\n\n\n\n\nHello Blog\n\n\n\n\n\nAn example blog post illustrating the key techniques you’ll need to demonstrate your learning in CSCI 0451.\n\n\n\n\n\nJan 10, 2023\n\n\nPhil Chodrow\n\n\n\n\n\n\nNo matching items"
   }
 ]
