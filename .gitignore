@@ -3,3 +3,4 @@
 *.code-workspace
 /.quarto/
 **/.ipynb_checkpoints/
+/posts/penguins-blog-post/copy.ipynb

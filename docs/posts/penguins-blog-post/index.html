@@ -392,15 +392,13 @@ dtype: object</code></pre>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>train[<span class="st">"Species"</span>] <span class="op">=</span> train[<span class="st">"Species"</span>].<span class="bu">str</span>.split().<span class="bu">str</span>.get(<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We’ll make the categorical data into either “one-hot-encoded” data using ‘pd.get_dummies’, or whole number data using LabelEncoder. We want “Species” to be whole number data because it’s the column we’re trying to predict.</p>
-<p>We’ll remove it temporarily to use get_dummies, then reinsert it.</p>
 <div id="cell-13" class="cell" data-execution_count="69">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>species <span class="op">=</span> train[[<span class="st">"Species"</span>]]</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> train.drop(axis<span class="op">=</span><span class="st">"columns"</span>, columns<span class="op">=</span>[<span class="st">"Species"</span>])</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#train.head()</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> <span class="dv">1</span><span class="op">*</span>pd.get_dummies(train)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> train.drop(axis<span class="op">=</span><span class="st">"columns"</span>, columns<span class="op">=</span>[<span class="st">"Sex_."</span>])</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>train.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> train.drop(axis<span class="op">=</span><span class="st">"columns"</span>, columns<span class="op">=</span>[<span class="st">"Sex_."</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="69">
 <div>
 
@@ -517,13 +515,10 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<p>…or whole number data using LabelEncoder</p>
-<div id="cell-15" class="cell" data-execution_count="70">
+<div id="cell-14" class="cell" data-execution_count="70">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> LabelEncoder</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>le <span class="op">=</span> LabelEncoder() </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>le.fit_transform(species)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>species.head()</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>le.fit_transform(species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>/Users/charliemoore/anaconda3/envs/ml-0451/lib/python3.9/site-packages/sklearn/preprocessing/_label.py:114: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
   y = column_or_1d(y, warn=True)</code></pre>
@@ -564,6 +559,16 @@ dtype: object</code></pre>
 </table>
 
 </div>
+</div>
+</div>
+</section>
+<section id="explore" class="level2">
+<h2 class="anchored" data-anchor-id="explore">Explore</h2>
+<p>To explore the data, 2 displayed figures and 1 displayed summary table:</p>
+<div id="cell-16" class="cell" data-execution_count="72">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>AttributeError: 'function' object has no attribute 'head'</code></pre>
 </div>
 </div>
 
