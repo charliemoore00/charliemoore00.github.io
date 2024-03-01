@@ -212,17 +212,20 @@ background-size: cover;
 
 
 
+<section id="abstract" class="level1">
+<h1>Abstract</h1>
+<p>describe high-level aims of the analysis and an overview of the findings. No more than 1 paragraph.</p>
 <p>First, we’ll load the palmer penguins dataset:</p>
-<div id="cell-2" class="cell" data-execution_count="64">
+<div id="cell-3" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/PhilChodrow/ml-notes/main/data/palmer-penguins/train.csv"</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> pd.read_csv(url)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We’ll take a quick peek at how the data looks:</p>
-<div id="cell-4" class="cell" data-execution_count="65">
+<div id="cell-5" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>train.head(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="65">
+<div class="cell-output cell-output-display" data-execution_count="24">
 <div>
 
 
@@ -356,50 +359,36 @@ background-size: cover;
 </div>
 </div>
 </div>
-<p>We don’t need some columns that aren’t related to classifying different species, so we’ll remove them from the dataset. We’ll also print the shape of the dataframe before and after to make sure it removed the columns correctly.</p>
-<div id="cell-6" class="cell" data-execution_count="66">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(train.shape)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> train.drop(axis<span class="op">=</span><span class="st">"columns"</span>, columns<span class="op">=</span>[<span class="st">"studyName"</span>, <span class="st">"Sample Number"</span>, <span class="st">"Individual ID"</span>, <span class="st">"Comments"</span>, <span class="st">"Date Egg"</span>, <span class="st">"Region"</span>])</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(train.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>(275, 17)
-(275, 11)</code></pre>
+</section>
+<section id="data-preparation" class="level1">
+<h1>Data Preparation</h1>
+<p>To format the data into what we want, we’ll have to do a few things. First, we’ll get rid of the columns that won’t help us predict the species of the penguin, in this case: “studyName”, “Sample Number”, “Individual ID”, “Date Egg”, “Comments”, and “Region”.</p>
+<div id="cell-7" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> train.drop([<span class="st">"studyName"</span>, <span class="st">"Sample Number"</span>, <span class="st">"Individual ID"</span>, <span class="st">"Date Egg"</span>, <span class="st">"Comments"</span>, <span class="st">"Region"</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>The “Sex” column includes a third sex titled “.” in the data that we will remove. We’ll also remove any rows with missing data.</p>
+<div id="cell-9" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> train[train[<span class="st">"Sex"</span>] <span class="op">!=</span> <span class="st">"."</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> train.dropna()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Since we’ll have to make all categorical data numerical, let’s see the data types of the variables:</p>
-<div id="cell-8" class="cell" data-execution_count="67">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>train.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="67">
-<pre><code>Species                 object
-Island                  object
-Stage                   object
-Clutch Completion       object
-Culmen Length (mm)     float64
-Culmen Depth (mm)      float64
-Flipper Length (mm)    float64
-Body Mass (g)          float64
-Sex                     object
-Delta 15 N (o/oo)      float64
-Delta 13 C (o/oo)      float64
-dtype: object</code></pre>
+<p>Lastly, we’ll convert all our categorical data into numerical data. For our target variable, “Species”, we’ll use a label encoder. This will assign each label a whole number. For the other columns, we will use one-hot encoding using <code>pandas.get_dummies</code> on our dataframe. This will create a new column for each unique value in the column. Our function <code>prepare_data</code> will return X_train, the training data without the target variable, and y_train, the training target variable.</p>
+<div id="cell-11" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> LabelEncoder</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>le <span class="op">=</span> LabelEncoder()</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>le.fit(train[<span class="st">"Species"</span>])</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepare_data(df):</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  y <span class="op">=</span> le.transform(df[<span class="st">"Species"</span>])</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> df.drop([<span class="st">"Species"</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> <span class="dv">1</span><span class="op">*</span>pd.get_dummies(df)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> df, y</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>X_train, y_train <span class="op">=</span> prepare_data(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-<section id="data-preparation" class="level2">
-<h2 class="anchored" data-anchor-id="data-preparation">Data Preparation:</h2>
-<p>First, we’ll take out all N/A values and make the ‘Species’ column more readable by taking out the latin name.</p>
-<div id="cell-11" class="cell" data-execution_count="68">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> train.dropna()</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>train[<span class="st">"Species"</span>] <span class="op">=</span> train[<span class="st">"Species"</span>].<span class="bu">str</span>.split().<span class="bu">str</span>.get(<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>We’ll make the categorical data into either “one-hot-encoded” data using ‘pd.get_dummies’, or whole number data using LabelEncoder. We want “Species” to be whole number data because it’s the column we’re trying to predict.</p>
-<div id="cell-13" class="cell" data-execution_count="69">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>species <span class="op">=</span> train[[<span class="st">"Species"</span>]]</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> train.drop(axis<span class="op">=</span><span class="st">"columns"</span>, columns<span class="op">=</span>[<span class="st">"Species"</span>])</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#train.head()</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> <span class="dv">1</span><span class="op">*</span>pd.get_dummies(train)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> train.drop(axis<span class="op">=</span><span class="st">"columns"</span>, columns<span class="op">=</span>[<span class="st">"Sex_."</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="69">
+<p>Now our data looks like this:</p>
+<div id="cell-13" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>X_train.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
 <div>
 
 
@@ -515,62 +504,15 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<div id="cell-14" class="cell" data-execution_count="70">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> LabelEncoder</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>le <span class="op">=</span> LabelEncoder() </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>le.fit_transform(species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>/Users/charliemoore/anaconda3/envs/ml-0451/lib/python3.9/site-packages/sklearn/preprocessing/_label.py:114: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().
-  y = column_or_1d(y, warn=True)</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="70">
-<div>
-
-
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Species</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>Chinstrap</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>Chinstrap</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>Gentoo</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>Gentoo</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>Chinstrap</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-</section>
+<p>We can see it’s all numerical data now, with many categories containing binary data. Time to explore!</p>
 <section id="explore" class="level2">
 <h2 class="anchored" data-anchor-id="explore">Explore</h2>
 <p>To explore the data, 2 displayed figures and 1 displayed summary table:</p>
-<div id="cell-16" class="cell" data-execution_count="72">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>AttributeError: 'function' object has no attribute 'head'</code></pre>
-</div>
-</div>
+</section>
+</section>
+<section id="discussion" class="level1">
+<h1>Discussion</h1>
+<p>Summarize findings and describe what you learned from the process of completing this post</p>
 
 
 </section>
