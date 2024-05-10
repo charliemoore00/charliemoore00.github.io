@@ -13,4 +13,6 @@ about:
 
 ---
 
-Blog for Spring 2024, Machine Learning CSCI0451
+Hi! I'm Charlie, a CS student graduating this May from Middlebury College. 
+
+This website is dedicated to showing my learning in this semester's Machine Learning course through a series of blog posts - these are short research projects aimed at polishing our skills working with data and constructing models, as well as thinking about the social and cultural impacts and bias present in the machine learning world.

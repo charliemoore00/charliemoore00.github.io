@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2024-03-07">
 <meta name="description" content="‘Optimal’ Decision-Making">
 
-<title>My Awesome CSCI 0451 Blog - Whose Costs?</title>
+<title>Machine Learning Blog - Whose Costs? [in progress]</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -137,7 +137,7 @@ background-size: cover;
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">My Awesome CSCI 0451 Blog</span>
+    <span class="navbar-title">Machine Learning Blog</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -151,12 +151,12 @@ background-size: cover;
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/charliemoore00/"> <i class="bi bi-github" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://www.linkedin.com/in/charlie-moore-b55340214/"> <i class="bi bi-linkedin" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -171,7 +171,7 @@ background-size: cover;
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Whose Costs?</h1>
+      <h1 class="title">Whose Costs? [in progress]</h1>
                   <div>
         <div class="description">
           ‘Optimal’ Decision-Making
@@ -331,7 +331,128 @@ background-size: cover;
 <section id="part-b-explore-the-data" class="level1">
 <h1>Part B: Explore The Data</h1>
 <p>Create at least two visualizations and one summary table in which you explore patterns in the data. You might consider some questions like:</p>
-<p>How does loan intent vary with the age, length of employment, or homeownership status of an individual? Which segments of prospective borrowers are offered low interest rates? Which segments are offered high interest rates? Which segments of prospective borrowers have access to large lines of credit?</p>
+<p>How does loan intent vary with the age, length of employment, or homeownership status of an individual?</p>
+<p>Which segments of prospective borrowers are offered low interest rates? Which segments are offered high interest rates?</p>
+<p>Which segments of prospective borrowers have access to large lines of credit?</p>
+<section id="summary-table" class="level4">
+<h4 class="anchored" data-anchor-id="summary-table">Summary table</h4>
+<p>The following table shows the means of each quantitative column, grouped by loan_grade, descending from the best grade ‘A’, denoting confidence that the recipient will pay back the loan, to the worst grade ‘G’, denoting the least confidence that the recipient will pay back the loan. We can see that loan as percent of income increases as the loan grade decreases. Loan amount increases as the loan grade decreases. Loan interest rate increases as the loan grade decreases.</p>
+<p>Interesting: the lower grades have a higher income.</p>
+<div id="cell-7" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>quant_col <span class="op">=</span> [<span class="st">"loan_grade"</span>, <span class="st">"loan_percent_income"</span>, <span class="st">"person_age"</span>, <span class="st">"person_income"</span>, <span class="st">"person_emp_length"</span>, <span class="st">"loan_amnt"</span>, <span class="st">"loan_int_rate"</span>, <span class="st">"cb_person_cred_hist_length"</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df_quant <span class="op">=</span> df_train[quant_col].dropna()</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df_quant.groupby([<span class="st">"loan_grade"</span>]).aggregate(<span class="st">"mean"</span>) <span class="co">#, "person_home_ownership"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">loan_percent_income</th>
+<th data-quarto-table-cell-role="th">person_age</th>
+<th data-quarto-table-cell-role="th">person_income</th>
+<th data-quarto-table-cell-role="th">person_emp_length</th>
+<th data-quarto-table-cell-role="th">loan_amnt</th>
+<th data-quarto-table-cell-role="th">loan_int_rate</th>
+<th data-quarto-table-cell-role="th">cb_person_cred_hist_length</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">loan_grade</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">A</td>
+<td>0.152629</td>
+<td>27.682077</td>
+<td>66773.007816</td>
+<td>5.122533</td>
+<td>8555.884885</td>
+<td>7.338368</td>
+<td>5.730560</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">B</td>
+<td>0.173846</td>
+<td>27.673949</td>
+<td>66662.091096</td>
+<td>4.750069</td>
+<td>10031.025007</td>
+<td>11.003273</td>
+<td>5.766007</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">C</td>
+<td>0.168928</td>
+<td>27.792667</td>
+<td>66416.633130</td>
+<td>4.402663</td>
+<td>9322.102794</td>
+<td>13.456237</td>
+<td>5.855303</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">D</td>
+<td>0.188833</td>
+<td>27.853112</td>
+<td>64555.473908</td>
+<td>4.699652</td>
+<td>10821.646695</td>
+<td>15.358261</td>
+<td>5.861229</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">E</td>
+<td>0.204190</td>
+<td>27.732955</td>
+<td>70868.349432</td>
+<td>4.458807</td>
+<td>12929.083807</td>
+<td>17.047344</td>
+<td>5.747159</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">F</td>
+<td>0.220982</td>
+<td>28.564417</td>
+<td>80756.546012</td>
+<td>4.239264</td>
+<td>15395.705521</td>
+<td>18.519018</td>
+<td>6.214724</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">G</td>
+<td>0.243409</td>
+<td>28.181818</td>
+<td>77342.477273</td>
+<td>5.954545</td>
+<td>17384.659091</td>
+<td>20.230000</td>
+<td>6.500000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="visualization-1" class="level4">
+<h4 class="anchored" data-anchor-id="visualization-1">Visualization 1</h4>
+</section>
+<section id="visualization-2" class="level4">
+<h4 class="anchored" data-anchor-id="visualization-2">Visualization 2</h4>
+</section>
 </section>
 <section id="part-c-build-a-model" class="level1">
 <h1>Part C: Build a Model</h1>
@@ -351,9 +472,9 @@ background-size: cover;
 <section id="part-e-evaluate-your-model-from-the-banks-perspective" class="level1">
 <h1>Part E: Evaluate Your Model from the Bank’s Perspective</h1>
 <p>Only after you have finalized your weight <strong>w</strong> vector and threshold <em>t</em>, evaluate your automated decision-process on the test set:</p>
-<div id="cell-9" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/PhilChodrow/ml-notes/main/data/credit-risk/test.csv"</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df_test <span class="op">=</span> pd.read_csv(url)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-13" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/PhilChodrow/ml-notes/main/data/credit-risk/test.csv"</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>df_test <span class="op">=</span> pd.read_csv(url)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>What is the expected profit per borrower on the test set? Is it similar to your profit on the training set?</p>
 </section>
@@ -370,7 +491,7 @@ background-size: cover;
 <h1>Part G: Write and Reflect</h1>
 <p>Write a brief introductory paragraph for your blog post describing the overall purpose, methodology, and findings of your study. Then, write a concluding discussion describing what you found and what you learned through from this blog post.</p>
 <p>Please include one paragraph discussing the following questions:</p>
-<p>Considering that people seeking loans for medical expense have high rates of default, is it fair that it is more difficult for them to obtain access to credit? You are free to define “fairness” in a way that makes sense to you, but *please write down your definition as part of your discussion.</p>
+<p>Considering that people seeking loans for medical expense have high rates of default, is it fair that it is more difficult for them to obtain access to credit? You are free to define “fairness” in a way that makes sense to you, but <strong>please write down your definition</strong> as part of your discussion.</p>
 
 
 </section>
