@@ -212,18 +212,23 @@ background-size: cover;
 
 
 
+<div id="cell-1" class="cell" data-execution_count="87">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>plt.style.use(<span class="st">'seaborn-v0_8-whitegrid'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <section id="part-a-grab-the-data" class="level1">
 <h1>Part A: Grab the Data</h1>
 <p>We’ll start by loading the data into a dataframe:</p>
-<div id="cell-2" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/PhilChodrow/ml-notes/main/data/credit-risk/train.csv"</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(url)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-3" class="cell" data-execution_count="88">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/PhilChodrow/ml-notes/main/data/credit-risk/train.csv"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> pd.read_csv(url)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We’ll take a peak at how the data looks:</p>
-<div id="cell-4" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="10">
+<div id="cell-5" class="cell" data-execution_count="89">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>train.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="89">
 <div>
 
 
@@ -339,11 +344,11 @@ background-size: cover;
 <p>The following table shows the means of each quantitative column, grouped by loan_grade, descending from the best grade ‘A’, denoting confidence that the recipient will pay back the loan, to the worst grade ‘G’, denoting the least confidence that the recipient will pay back the loan. We can see that loan as percent of income increases as the loan grade decreases. Loan amount increases as the loan grade decreases. Loan interest rate increases as the loan grade decreases.</p>
 <p>Interesting: the lower grades have a higher income.</p>
 <p>I’ve selected just the columns with quantitative information and cleaned the data by removing rows with missing values.</p>
-<div id="cell-7" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>quant_col <span class="op">=</span> [<span class="st">"loan_grade"</span>, <span class="st">"loan_percent_income"</span>, <span class="st">"person_age"</span>, <span class="st">"person_income"</span>, <span class="st">"person_emp_length"</span>, <span class="st">"loan_amnt"</span>, <span class="st">"loan_int_rate"</span>, <span class="st">"cb_person_cred_hist_length"</span>]</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df_quant <span class="op">=</span> df[quant_col].dropna()</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df_quant.groupby([<span class="st">"loan_grade"</span>]).aggregate(<span class="st">"mean"</span>) <span class="co">#, "person_home_ownership"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="11">
+<div id="cell-8" class="cell" data-execution_count="90">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>quant_col <span class="op">=</span> [<span class="st">"loan_grade"</span>, <span class="st">"loan_percent_income"</span>, <span class="st">"person_age"</span>, <span class="st">"person_income"</span>, <span class="st">"person_emp_length"</span>, <span class="st">"loan_amnt"</span>, <span class="st">"loan_int_rate"</span>, <span class="st">"cb_person_cred_hist_length"</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>train_quant <span class="op">=</span> train[quant_col].dropna()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>train_quant.groupby([<span class="st">"loan_grade"</span>]).aggregate(<span class="st">"mean"</span>) <span class="co">#, "person_home_ownership"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="90">
 <div>
 
 
@@ -448,30 +453,14 @@ background-size: cover;
 </div>
 </div>
 <p>Let’s load our visualization library:</p>
-<div id="cell-9" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-10" class="cell" data-execution_count="91">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="visualization-1" class="level4">
 <h4 class="anchored" data-anchor-id="visualization-1">Visualization 1</h4>
-<div id="cell-11" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sns.boxplot(df, x<span class="op">=</span><span class="st">"cb_person_default_on_file"</span>, y<span class="op">=</span><span class="st">"loan_amnt"</span>, hue_order<span class="op">=</span>[<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"E"</span>, <span class="st">"F"</span>, <span class="st">"G"</span>], hue<span class="op">=</span><span class="st">"loan_grade"</span>, palette<span class="op">=</span><span class="st">"Set2"</span>, fliersize<span class="op">=</span><span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="visualization-2" class="level4">
-<h4 class="anchored" data-anchor-id="visualization-2">Visualization 2</h4>
-<p>Here we visualize a scatterplot where loan percent income is on the x-axis, and loan interest rate is on the y-axis. The color of the data corresponds to the loan grade given by the bank.</p>
-<p>We can see that loan interest rate has a high correlation to loan grade - the higher the interest rate, the lower the loan grade.</p>
-<div id="cell-13" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>order_loan_grade <span class="op">=</span> [<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"E"</span>, <span class="st">"F"</span>, <span class="st">"G"</span>]</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(df, x<span class="op">=</span><span class="st">"loan_percent_income"</span>, y<span class="op">=</span><span class="st">"loan_int_rate"</span>, hue<span class="op">=</span><span class="st">"loan_grade"</span>, hue_order<span class="op">=</span>order_loan_grade)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-12" class="cell" data-execution_count="92">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sns.boxplot(train, x<span class="op">=</span><span class="st">"cb_person_default_on_file"</span>, y<span class="op">=</span><span class="st">"loan_amnt"</span>, hue_order<span class="op">=</span>[<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"E"</span>, <span class="st">"F"</span>, <span class="st">"G"</span>], hue<span class="op">=</span><span class="st">"loan_grade"</span>, palette<span class="op">=</span><span class="st">"Set2"</span>, fliersize<span class="op">=</span><span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -481,42 +470,48 @@ background-size: cover;
 </div>
 </div>
 </section>
+<section id="visualization-2" class="level4">
+<h4 class="anchored" data-anchor-id="visualization-2">Visualization 2</h4>
+<p>Here we visualize a scatterplot where loan percent income is on the x-axis, and loan interest rate is on the y-axis. The color of the data corresponds to the loan grade given by the bank.</p>
+<p>We can see that loan interest rate has a high correlation to loan grade - the higher the interest rate, the lower the loan grade.</p>
+<div id="cell-14" class="cell" data-execution_count="93">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>order_loan_grade <span class="op">=</span> [<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"E"</span>, <span class="st">"F"</span>, <span class="st">"G"</span>]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(train, x<span class="op">=</span><span class="st">"loan_percent_income"</span>, y<span class="op">=</span><span class="st">"loan_int_rate"</span>, hue<span class="op">=</span><span class="st">"loan_grade"</span>, hue_order<span class="op">=</span>order_loan_grade)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 </section>
 <section id="part-c-build-a-model" class="level1">
 <h1>Part C: Build a Model</h1>
-<p>Please use any technique to construct a score function and threshold for predicting whether a prospective borrower is likely to default on a given loan. You may use all the features in the data except loan_grade (and the target variable loan_status), and you may choose any subset of these. There are several valid ways to approach this modeling task:</p>
-<ol type="1">
-<li>Choose features and estimate entries of a weight vector <strong>w</strong> by hand (this is allowed but not recommended).</li>
-<li>(Recommended): Choose your features, estimate new ones if needed, and fit a score-based machine learning model to the data. My suggestion is LogisticRegression. Once you have fit a logistic regression model, the weight vector <strong>w</strong> is stored as the attribute <code>model.coef_</code>.</li>
-</ol>
-<p>I suggest that you try several combinations of features, possibly including some which you create, and test out which combinations work best with cross-validation.</p>
-<div id="cell-15" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>df_train, df_test <span class="op">=</span> train_test_split(df, test_size<span class="op">=</span><span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We’re going to use cross validation to score all combinations of features to find the best ones to use in our model.</p>
+<section id="data-preparation" class="level3">
+<h3 class="anchored" data-anchor-id="data-preparation">Data Preparation</h3>
+<p>In order to find the optimal variables for a model, we need to prep the data - specifically dropping rows with NAs and using one-hot encoding to turn the categorical variables into numerical ones.</p>
+<div id="cell-17" class="cell" data-execution_count="94">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> train.dropna()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> LabelEncoder</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>le <span class="op">=</span> LabelEncoder()</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>le.fit(train[<span class="st">"loan_status"</span>])</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepare_data(df):</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  y <span class="op">=</span> le.transform(df[<span class="st">"loan_status"</span>])</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> df.drop([<span class="st">"loan_status"</span>], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> <span class="dv">1</span><span class="op">*</span>pd.get_dummies(df)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> df, y</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>X_train, y_train <span class="op">=</span> prepare_data(train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-16" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df_train.shape, df_test.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="19">
-<pre><code>((20851, 12), (5213, 12))</code></pre>
-</div>
-</div>
-<div id="cell-17" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="cell-18" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>predictor_cols <span class="op">=</span> [<span class="st">"loan_int_rate"</span>, <span class="st">"loan_percent_income"</span>]</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>target_col <span class="op">=</span> [<span class="st">"loan_status"</span>]</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> df_train[predictor_cols]</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>y_train <span class="op">=</span> df_train[target_col]</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>X_test <span class="op">=</span> df_test[predictor_cols]</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span> df_test[target_col]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div id="cell-19" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>X_train</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="21">
+<p>If we check how our data looks, we can see each categorical variable now is represented by multiple columns with binary values.</p>
+<div id="cell-19" class="cell" data-execution_count="95">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>X_train.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="95">
 <div>
 
 
@@ -524,98 +519,6538 @@ background-size: cover;
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">loan_int_rate</th>
+<th data-quarto-table-cell-role="th">person_age</th>
+<th data-quarto-table-cell-role="th">person_income</th>
+<th data-quarto-table-cell-role="th">person_emp_length</th>
 <th data-quarto-table-cell-role="th">loan_amnt</th>
+<th data-quarto-table-cell-role="th">loan_int_rate</th>
+<th data-quarto-table-cell-role="th">loan_percent_income</th>
+<th data-quarto-table-cell-role="th">cb_person_cred_hist_length</th>
+<th data-quarto-table-cell-role="th">person_home_ownership_MORTGAGE</th>
+<th data-quarto-table-cell-role="th">person_home_ownership_OTHER</th>
+<th data-quarto-table-cell-role="th">person_home_ownership_OWN</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">loan_intent_VENTURE</th>
+<th data-quarto-table-cell-role="th">loan_grade_A</th>
+<th data-quarto-table-cell-role="th">loan_grade_B</th>
+<th data-quarto-table-cell-role="th">loan_grade_C</th>
+<th data-quarto-table-cell-role="th">loan_grade_D</th>
+<th data-quarto-table-cell-role="th">loan_grade_E</th>
+<th data-quarto-table-cell-role="th">loan_grade_F</th>
+<th data-quarto-table-cell-role="th">loan_grade_G</th>
+<th data-quarto-table-cell-role="th">cb_person_default_on_file_N</th>
+<th data-quarto-table-cell-role="th">cb_person_default_on_file_Y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1</td>
+<td>27</td>
+<td>98000</td>
+<td>3.0</td>
+<td>11750</td>
+<td>13.47</td>
+<td>0.12</td>
+<td>6</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2</td>
+<td>22</td>
+<td>36996</td>
+<td>5.0</td>
+<td>10000</td>
+<td>7.51</td>
+<td>0.27</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>...</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3</td>
+<td>24</td>
+<td>26000</td>
+<td>2.0</td>
+<td>1325</td>
+<td>12.87</td>
+<td>0.05</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4</td>
+<td>29</td>
+<td>53004</td>
+<td>2.0</td>
+<td>15000</td>
+<td>9.63</td>
+<td>0.28</td>
+<td>10</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>...</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>21</td>
+<td>21700</td>
+<td>2.0</td>
+<td>5500</td>
+<td>14.91</td>
+<td>0.25</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>...</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 26 columns</p>
+</div>
+</div>
+</div>
+<p>We will use the <code>combinations</code> function from the <code>itertools</code> package. This will list all the combinations of one discreet variable and two continuous variables. Iterating through all the possible combinations, it will A) score the model using cross validation, and B) return the best combination of columns that performed the best.</p>
+<div id="cell-21" class="cell" data-execution_count="96">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> combinations</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>LR <span class="op">=</span> LogisticRegression(max_iter<span class="op">=</span><span class="dv">999</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>all_qual_cols <span class="op">=</span> [<span class="st">"person_home_ownership"</span>, <span class="st">"loan_intent"</span>, <span class="st">"cb_person_default_on_file"</span>]</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>all_quant_cols <span class="op">=</span> [<span class="st">"person_age"</span>, <span class="st">"person_income"</span>, <span class="st">"person_emp_length"</span>, <span class="st">"loan_amnt"</span>, <span class="st">"loan_int_rate"</span>, <span class="st">"loan_percent_income"</span>, <span class="st">"cb_person_cred_hist_length"</span>]</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>score <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>cols_best <span class="op">=</span> []</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> qual <span class="kw">in</span> all_qual_cols:</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    qual_cols <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> X_train.columns <span class="cf">if</span> qual <span class="kw">in</span> col]</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> pair <span class="kw">in</span> combinations(all_quant_cols, <span class="dv">2</span>):</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>        cols <span class="op">=</span> qual_cols <span class="op">+</span> <span class="bu">list</span>(pair)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        <span class="co">#fit the models</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        log_score <span class="op">=</span> cross_val_score(LR, X_train[cols], y_train, cv <span class="op">=</span> <span class="dv">5</span>).mean()</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>        <span class="co">#compare the scores</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> log_score <span class="op">&gt;</span> score:</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>            score <span class="op">=</span> log_score</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>            cols_best <span class="op">=</span> cols</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="co">#output the best score, along with the corresponding columns</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(score)</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cols_best)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.8488229950993185
+['person_home_ownership_MORTGAGE', 'person_home_ownership_OTHER', 'person_home_ownership_OWN', 'person_home_ownership_RENT', 'person_age', 'loan_percent_income']</code></pre>
+</div>
+</div>
+<p>Looks like the best features to use are: loan_intent, person_age, and loan_percent_income</p>
+<div id="cell-23" class="cell" data-execution_count="166">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>LR <span class="op">=</span> LogisticRegression(max_iter<span class="op">=</span><span class="dv">999999999</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LR.fit(X_train[cols_best], y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-24" class="cell" data-execution_count="167">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># our weights are now stored in:</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>model.coef_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="167">
+<pre><code>array([[-7.52981385e-01, -8.75812948e-02, -1.79583155e+00,
+         2.81498971e-01, -4.00881551e-03,  8.27632650e+00]])</code></pre>
+</div>
+</div>
+<div id="cell-25" class="cell" data-execution_count="168">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>X_train[cols_best]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="168">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">person_home_ownership_MORTGAGE</th>
+<th data-quarto-table-cell-role="th">person_home_ownership_OTHER</th>
+<th data-quarto-table-cell-role="th">person_home_ownership_OWN</th>
+<th data-quarto-table-cell-role="th">person_home_ownership_RENT</th>
+<th data-quarto-table-cell-role="th">person_age</th>
 <th data-quarto-table-cell-role="th">loan_percent_income</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">16321</td>
-<td>11.83</td>
-<td>12000</td>
-<td>0.36</td>
+<td data-quarto-table-cell-role="th">1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>27</td>
+<td>0.12</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3593</td>
-<td>10.37</td>
-<td>5100</td>
-<td>0.09</td>
+<td data-quarto-table-cell-role="th">2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>22</td>
+<td>0.27</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">3808</td>
-<td>11.66</td>
-<td>2725</td>
+<td data-quarto-table-cell-role="th">3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>24</td>
 <td>0.05</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">16825</td>
-<td>NaN</td>
-<td>9000</td>
-<td>0.15</td>
+<td data-quarto-table-cell-role="th">4</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>29</td>
+<td>0.28</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">24791</td>
-<td>7.88</td>
-<td>8000</td>
-<td>0.11</td>
+<td data-quarto-table-cell-role="th">6</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>21</td>
+<td>0.25</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">...</td>
 <td>...</td>
 <td>...</td>
 <td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">18679</td>
-<td>13.61</td>
-<td>2500</td>
-<td>0.06</td>
+<td data-quarto-table-cell-role="th">26059</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>36</td>
+<td>0.02</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1370</td>
-<td>19.91</td>
-<td>30000</td>
-<td>0.13</td>
+<td data-quarto-table-cell-role="th">26060</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>23</td>
+<td>0.09</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">13572</td>
-<td>6.03</td>
-<td>6500</td>
-<td>0.11</td>
+<td data-quarto-table-cell-role="th">26061</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>22</td>
+<td>0.25</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">17864</td>
-<td>10.37</td>
-<td>2000</td>
-<td>0.05</td>
+<td data-quarto-table-cell-role="th">26062</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>30</td>
+<td>0.24</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">21378</td>
-<td>11.86</td>
-<td>5000</td>
-<td>0.07</td>
+<td data-quarto-table-cell-role="th">26063</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>25</td>
+<td>0.36</td>
 </tr>
 </tbody>
 </table>
 
-<p>20851 rows × 3 columns</p>
+<p>22907 rows × 6 columns</p>
 </div>
 </div>
 </div>
+</section>
 </section>
 <section id="part-d-find-a-threshold" class="level1">
 <h1>Part D: Find a Threshold</h1>
 <p>Once you have a weight vector <strong>w</strong>, it is time to choose a threshold <em>t</em>. To choose a threshold that maximizes profit for the bank, we need to make some assumptions about how the bank makes and loses money on loans. Let’s use the following (simplified) modeling assumptions:</p>
 <p>If the loan is repaid in full, the profit for the bank is equal to <code>loan_amnt*(1 + 0.25*loan_int_rate)**10 - loan_amnt</code>. This formula assumes that the profit earned by the bank on a 10-year loan is equal to 25% of the interest rate each year, with the other 75% of the interest going to things like salaries for the people who manage the bank. It is extremely simplistic and does not account for inflation, amortization over time, opportunity costs, etc. If the borrower defaults on the loan, the “profit” for the bank is equal to <code>loan_amnt*(1 + 0.25*loan_int_rate)**3 - 1.7*loan_amnt</code>. This formula corresponds to the same profit-earning mechanism as above, but assumes that the borrower defaults three years into the loan and that the bank loses 70% of the principal. These modeling assumptions are extremely simplistic! You may deviate from these assumptions if you have relevant prior knowledge to inform your approach!!</p>
 <p>Based on your assumptions, determine the threshold <em>t</em> which optimizes profit for the bank on the training set. Explain your approach, including labeled visualizations where appropriate, and include a final estimate of the bank’s expected profit per borrower on the training set.</p>
+<p>Let’s first create a function to calculate the profit from predicted target variables. It will take in the prediction column of 0s and 1s that guesses if a person will default or not, and return the total profit.</p>
+<div id="cell-28" class="cell" data-execution_count="169">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> profit(target_col):</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (train[<span class="st">"loan_amnt"</span>] <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> <span class="fl">0.0025</span><span class="op">*</span>train[<span class="st">"loan_int_rate"</span>])<span class="op">**</span>(<span class="dv">10</span> <span class="op">-</span> <span class="dv">7</span><span class="op">*</span>target_col) <span class="op">-</span> (<span class="dv">1</span> <span class="op">+</span> <span class="fl">0.7</span><span class="op">*</span>target_col)<span class="op">*</span>train[<span class="st">"loan_amnt"</span>]).<span class="bu">sum</span>()</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>profit(train[<span class="st">"loan_status"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="169">
+<pre><code>18753738.0082548</code></pre>
+</div>
+</div>
+<p>We can see that the total profit is $18,753,738. But our job is to find the threshold <code>t</code> that maximizes this!</p>
+<p>First, we’ll turn our scores into a numpy array <code>w</code> for ease</p>
+<div id="cell-31" class="cell" data-execution_count="170">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> np.array(model.coef_)[<span class="dv">0</span>]</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>w</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="170">
+<pre><code>array([-7.52981385e-01, -8.75812948e-02, -1.79583155e+00,  2.81498971e-01,
+       -4.00881551e-03,  8.27632650e+00])</code></pre>
+</div>
+</div>
+<p>Let’s create a function <code>linear_score</code> that computes the weighted score using our 6 predictor columns and weights <code>w</code></p>
+<div id="cell-33" class="cell" data-execution_count="213">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> linear_score(w, x0, x1, x2, x3, x4, x5):</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> w[<span class="dv">0</span>]<span class="op">*</span>x0 <span class="op">+</span> w[<span class="dv">1</span>]<span class="op">*</span>x1 <span class="op">+</span> w[<span class="dv">2</span>]<span class="op">*</span>x2 <span class="op">+</span> w[<span class="dv">3</span>]<span class="op">*</span>x3 <span class="op">+</span> w[<span class="dv">4</span>]<span class="op">*</span>x4 <span class="op">+</span> w[<span class="dv">5</span>]<span class="op">*</span>x5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s also create a predict method to guess based off of our threshold:</p>
+<div id="cell-35" class="cell" data-execution_count="248">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> predict(w, threshold, df):</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> linear_score(w, df[<span class="st">"person_home_ownership_MORTGAGE"</span>], </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                             df[<span class="st">'person_home_ownership_OTHER'</span>], </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                             df[<span class="st">'person_home_ownership_OWN'</span>], </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                             df[<span class="st">'person_home_ownership_RENT'</span>], </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                             df[<span class="st">'person_age'</span>], </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>                             df[<span class="st">'loan_percent_income'</span>])</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">#threshold = int(threshold)</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(scores)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(scores.<span class="bu">min</span>())</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(scores.<span class="bu">max</span>())</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(scores.mean())</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">*</span>(scores<span class="op">&gt;</span>threshold)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We’ll use this function to add a new column into our dataframe of our predictions based off of our threshold. Let’s start off with a guess of 1 as the threshold:</p>
+<div id="cell-37" class="cell" data-execution_count="249">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>train[<span class="st">"prediction"</span>] <span class="op">=</span> predict(w, <span class="dv">10</span>, X_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128</code></pre>
+</div>
+</div>
+<p>Let’s see how well our guess does!</p>
+<div id="cell-39" class="cell" data-execution_count="228">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>(train[<span class="st">"prediction"</span>] <span class="op">==</span> train[<span class="st">"loan_status"</span>]).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="228">
+<pre><code>0.7849565634958746</code></pre>
+</div>
+</div>
+<p>That reflects how accurate we were - but how about finding the profit from that threshold? That’s ultimately the goal here.</p>
+<div id="cell-41" class="cell" data-execution_count="229">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>profit(train[<span class="st">"prediction"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="229">
+<pre><code>72044007.76290669</code></pre>
+</div>
+</div>
+<p>Oof! Looks like this would result in the bank losing over $46 million! Now let’s find a better threshold that allows our bank to make the most profit.</p>
+<p>Let’s construct a master function that will take in a threshold and return the profit:</p>
+<div id="cell-44" class="cell" data-execution_count="246">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> profit_sum(threshold, w, train):</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""scores = linear_score(w, train["person_home_ownership_MORTGAGE"], </span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co">                             train['person_home_ownership_OTHER'], </span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co">                             train['person_home_ownership_OWN'], </span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co">                             train['person_home_ownership_RENT'], </span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="co">                             train['person_age'], </span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co">                             train['loan_percent_income'])"""</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> profit(predict(w, threshold, train)).<span class="bu">sum</span>()</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="co"># test it with threshold = 1</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(profit_sum(<span class="op">-</span><span class="dv">3</span>, w, X_train))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>-135117810.3379897</code></pre>
+</div>
+</div>
+<div id="cell-45" class="cell" data-execution_count="185">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(w.<span class="bu">min</span>())</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(w.<span class="bu">max</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>-1.7958315514403203
+8.276326496866838</code></pre>
+</div>
+</div>
+<p>Let’s create a function <code>optimal</code> that takes a threshold t and returns the profit</p>
+<div id="cell-47" class="cell" data-execution_count="240">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> optimal(t):</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> profit(predict(w, t, X_train))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now let’s graph this function over the span of possible thresholds</p>
+<div id="cell-49" class="cell" data-execution_count="253">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>t_values <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">400</span>)  <span class="co"># 400 points for smoother curve</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>optimal_values <span class="op">=</span> [optimal(t) <span class="cf">for</span> t <span class="kw">in</span> t_values]</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the function</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>plt.plot(t_values, optimal_values, label<span class="op">=</span><span class="st">'Optimal(t)'</span>, color<span class="op">=</span><span class="st">'blue'</span>)</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Graph of Optimal(t) from -8 to 8'</span>)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'t'</span>)</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Optimal(t)'</span>)</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>)</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128
+1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-25-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In this case, looks like around 7 is the t value that yields the maximum profit.</p>
+<div id="cell-51" class="cell" data-execution_count="254">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>threshold <span class="op">=</span> <span class="dv">7</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we’ll use gradient descent to find the optimal value for the threshold</p>
+<div id="cell-53" class="cell" data-execution_count="242">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> X_train[cols_best]</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>init_threshold <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> minimize(<span class="kw">lambda</span> t: optimal(t), x0 <span class="op">=</span> init_threshold, bounds <span class="op">=</span> [(<span class="op">-</span><span class="dv">2</span>, <span class="dv">9</span>)], method<span class="op">=</span><span class="st">'BFGS'</span>)</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>optimal_threshold <span class="op">=</span> result.x</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Optimal threshold: "</span>, result)</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Maximum Profit: "</span>, <span class="op">-</span>optimal(optimal_threshold))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/rd/vvrhhjq53ds_4zcgxzqhtlc40000gn/T/ipykernel_4869/1011958523.py:8: RuntimeWarning: Method BFGS cannot handle bounds.
+  result = minimize(lambda t: optimal(t), x0 = init_threshold, bounds = [(-2, 9)], method='BFGS')</code></pre>
+</div>
+<div class="cell-output cell-output-error">
+<pre><code>ValueError: ('Lengths must match to compare', (22907,), (1,))</code></pre>
+</div>
+</div>
+<div id="cell-54" class="cell" data-execution_count="111">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_func(t):</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (t<span class="op">-</span><span class="dv">2</span>)<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>init_threshold <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> minimize(<span class="kw">lambda</span> t: test_func(t), init_threshold, method<span class="op">=</span><span class="st">'BFGS'</span>)</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>optimal_threshold <span class="op">=</span> result.x</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Optimal threshold: "</span>, optimal_threshold)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Optimal threshold:  [1.99999999]</code></pre>
+</div>
+</div>
+<div id="cell-55" class="cell" data-execution_count="256">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>optimal(threshold)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1        1.166420
+2        2.427913
+3        0.599104
+4        1.448134
+6        2.266395
+           ...   
+26059   -0.731772
+26060    0.934166
+26061    2.262387
+26062    1.113073
+26063    3.160756
+Length: 22907, dtype: float64
+-1.8573856448081225
+6.55004116991843
+0.9818982453115128</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="256">
+<pre><code>72044007.76290669</code></pre>
+</div>
+</div>
 </section>
 <section id="part-e-evaluate-your-model-from-the-banks-perspective" class="level1">
 <h1>Part E: Evaluate Your Model from the Bank’s Perspective</h1>
 <p>Only after you have finalized your weight <strong>w</strong> vector and threshold <em>t</em>, evaluate your automated decision-process on the test set:</p>
-<div id="cell-22" class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/PhilChodrow/ml-notes/main/data/credit-risk/test.csv"</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>df_test <span class="op">=</span> pd.read_csv(url)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-57" class="cell" data-execution_count="257">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/PhilChodrow/ml-notes/main/data/credit-risk/test.csv"</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>train_test <span class="op">=</span> pd.read_csv(url)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>What is the expected profit per borrower on the test set? Is it similar to your profit on the training set?</p>
 </section>
