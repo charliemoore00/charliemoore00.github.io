@@ -129,27 +129,42 @@ class LogisticRegression(LinearModel):
 
 
 class GradientDescentOptimizer():
-    def dostuff():
-        print("doing stuff")
+
+    def __init__(self, model):
+        self.model = model
+        self.w_old = None
+
+    def step(self, X, y, alpha, beta):
+
+        """
+        Implements Gradient Descent with Momentum
+        It performs an update of the weights w
+
+        ARGUMENTS:
+            X, torch.Tensor: the feature matrix
+
+            y, torch.Tensor: the target vector
+
+            alpha
+
+            beta
+
+        RETURNS:
+            Nothing
+            Updates the weights self.model.w
+            Use equation:
+            Wk+1 <-- Wk - alpha(grad(Wk)) + beta(Wk - Wk+1)
+        """
+
+        gradient = self.model.grad(X, y)
+        w = self.model.w
+        #if self.w_old is None:
+            #self.w_old = torch.zeros_like(w)
+
+        new_weights = w - alpha*gradient
+
+        if self.w_old != None:
+            new_weights += beta*(w - self.w_old)
         
-
-        
-
-
-# TESTING
-def classification_data(n_points = 300, noise = 0.2, p_dims = 2):
-    
-    y = torch.arange(n_points) >= int(n_points/2)
-    y = 1.0*y
-    X = y[:, None] + torch.normal(0.0, noise, size = (n_points,p_dims))
-    X = torch.cat((X, torch.ones((X.shape[0], 1))), 1)
-    
-    return X, y
-
-X, y = classification_data(noise = 0.5)
-
-LR = LogisticRegression()
-s = LR.loss(X, y)
-g = LR.grad(X, y)
-print(s)
-print(g)
+        self.w_old = w.clone()
+        self.model.w = new_weights
