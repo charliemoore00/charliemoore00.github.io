@@ -32,6 +32,27 @@
     "href": "index.html",
     "title": "Machine Learning Blog",
     "section": "",
-    "text": "Whose Costs? [in progress]\n\n\n\n\n\n‘Optimal’ Decision-Making\n\n\n\n\n\nMar 7, 2024\n\n\nCharlie Moore\n\n\n\n\n\n\n\n\n\n\n\n\nPenguins Blog\n\n\n\n\n\nPalmer Penguins!\n\n\n\n\n\nFeb 19, 2024\n\n\nCharlie Moore\n\n\n\n\n\n\nNo matching items"
+    "text": "Implementing Logistic Regression [in progress]\n\n\n\n\n\n’Implementing Logistic Regression\n\n\n\n\n\nMay 12, 2024\n\n\nCharlie Moore\n\n\n\n\n\n\n\n\n\n\n\n\nWhose Costs? [in progress]\n\n\n\n\n\n‘Optimal’ Decision-Making\n\n\n\n\n\nMar 7, 2024\n\n\nCharlie Moore\n\n\n\n\n\n\n\n\n\n\n\n\nPenguins Blog\n\n\n\n\n\nPalmer Penguins!\n\n\n\n\n\nFeb 19, 2024\n\n\nCharlie Moore\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/implementing-logisitc-regression/index.html",
+    "href": "posts/implementing-logisitc-regression/index.html",
+    "title": "Implementing Logistic Regression [in progress]",
+    "section": "",
+    "text": "Recently, we introduced the gradient descent algorithm for solving the empirical risk minimization problem. We also calculated the gradient of the loss function for logistic regression.\nIn this blog post you will:\nImplement gradient descent for logistic regression in an object-oriented paradigm. Implement a key variant of gradient descent with momentum in order to achieve faster convergence. Perform experiments to test your implementations."
+  },
+  {
+    "objectID": "posts/implementing-logisitc-regression/index.html#introduction",
+    "href": "posts/implementing-logisitc-regression/index.html#introduction",
+    "title": "Implementing Logistic Regression [in progress]",
+    "section": "",
+    "text": "Recently, we introduced the gradient descent algorithm for solving the empirical risk minimization problem. We also calculated the gradient of the loss function for logistic regression.\nIn this blog post you will:\nImplement gradient descent for logistic regression in an object-oriented paradigm. Implement a key variant of gradient descent with momentum in order to achieve faster convergence. Perform experiments to test your implementations."
+  },
+  {
+    "objectID": "posts/implementing-logisitc-regression/index.html#getting-started",
+    "href": "posts/implementing-logisitc-regression/index.html#getting-started",
+    "title": "Implementing Logistic Regression [in progress]",
+    "section": "Getting Started",
+    "text": "Getting Started\n\nPlease create a new blog post. In addition to the usual .ipynb file, please also create a script called logistic.py in the same directory. This is the file in which you will implement logistic regression.\nThen, in your .ipynb notebook file, place the following in a Python code block underneath your metadata block: %load_ext autoreload %autoreload 2 from logistic import LogisticRegression, GradientDescentOptimizer\n\nIf you complete the optional implementation of Newton’s Method, you’ll also need to import NewtonOptimizer."
   }
 ]
