@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2024-05-12">
 <meta name="description" content="’Implementing Logistic Regression">
 
-<title>Machine Learning Blog - Implementing Logistic Regression [in progress]</title>
+<title>Machine Learning Blog - Implementing Logistic Regression</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -197,7 +197,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Implementing Logistic Regression [in progress]</h1>
+      <h1 class="title">Implementing Logistic Regression</h1>
                   <div>
         <div class="description">
           ’Implementing Logistic Regression
@@ -238,101 +238,126 @@ window.Quarto = {
 
 
 
-<div id="cell-1" class="cell" data-execution_count="275">
+<p>Gradient Descent for Logistic Regression is implemented in <a href="https://github.com/charliemoore00/charliemoore00.github.io/blob/main/posts/implementing-logistic-regression/logistic.py">logistic.py</a></p>
+<section id="abstract" class="level2">
+<h2 class="anchored" data-anchor-id="abstract">Abstract</h2>
+<p>This blog post contains an implementation of Logistic Regression with a Gradient Descent with Momentum Optimizer. The implementation exists as the logistic.py class, available above. We’ll set up some sample data, train a model, and conduct some experiments using this implementation:</p>
+<ul>
+<li><strong>Classic Gradient Descent without momentum</strong>: using just two features</li>
+<li><strong>Gradient Descent with momentum</strong>: how does momentum affect how quickly and accurately our model converges?</li>
+<li><strong>Overfitting</strong>: how does the relationship between number of data points and number of features affect our model’s accuracy?</li>
+</ul>
+<p>First, let’s load our logistic regression implementation and other necessary packages.</p>
+<div id="cell-4" class="cell" data-execution_count="477">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>load_ext autoreload</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>autoreload <span class="dv">2</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> logistic <span class="im">import</span> LogisticRegression, GradientDescentOptimizer</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt <span class="co"># type: ignore</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The autoreload extension is already loaded. To reload it, use:
   %reload_ext autoreload</code></pre>
 </div>
 </div>
-<section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>Recently, we introduced the gradient descent algorithm for solving the empirical risk minimization problem. We also calculated the gradient of the loss function for logistic regression.</p>
-<p>In this blog post you will:</p>
-<p>Implement gradient descent for logistic regression in an object-oriented paradigm. Implement a key variant of gradient descent with momentum in order to achieve faster convergence. Perform experiments to test your implementations.</p>
 </section>
-<section id="part-a-implement-logistic-regression" class="level1">
-<h1>Part A: Implement Logistic Regression</h1>
-<section id="implement-linearmodel-and-logisticregression" class="level2">
-<h2 class="anchored" data-anchor-id="implement-linearmodel-and-logisticregression">Implement <code>LinearModel</code> and <code>LogisticRegression()</code></h2>
-<p>If you haven’t already, implement the methods of the <code>LinearModel</code> class as described in this warmup. Then, define a new class called <code>LogisticRegression</code> which inherits from <code>LinearModel</code>. This class should have two methods:</p>
+<section id="implementing-logistic-regression" class="level2">
+<h2 class="anchored" data-anchor-id="implementing-logistic-regression">Implementing Logistic Regression</h2>
+<p>The following classes are implemented in logistic.py - the link is at the top of this page.</p>
+<section id="implement-linearmodel-logisticregression-and-gradientdescentoptimizer" class="level4">
+<h4 class="anchored" data-anchor-id="implement-linearmodel-logisticregression-and-gradientdescentoptimizer">Implement <code>LinearModel</code>, <code>LogisticRegression()</code>, and <code>GradientDescentOptimizer</code></h4>
+<p>The <code>LogisticRegression()</code> class has two methods:</p>
 <ul>
-<li><p><code>LogisticRegression.loss(X, y)</code> should compute the empirical risk <span class="math inline">\(L(w)\)</span> using the logistic loss function. The weight vector <code>w</code> used for this calculation should be stored as an instance variable of the class.</p></li>
-<li><p><code>LogisticRegression.grad(X, y)</code> should compute the gradient of the empirical risk <span class="math inline">\(L(w)\)</span>. You can use the formula for the gradient supplied in the lecture notes on gradient descent.</p></li>
+<li><code>LogisticRegression.loss(X, y)</code> computes the empirical risk <span class="math inline">\(L(w)\)</span> using the logistic loss function:
+<span class="math display">\[\begin{aligned}
+L(\mathbf{w}) = \frac{1}{n} \sum_{i = 1}^n \left[-y_i \log \sigma(s_i) - (1-y_i)\log (1-\sigma(s_i))\right]
+\end{aligned}\]</span>
+.</li>
+<li><code>LogisticRegression.grad(X, y)</code> computes the <em>gradient</em> of the empirical risk <span class="math inline">\({\nabla}L(w)\)</span> using this formula:
+<span class="math display">\[\begin{aligned}
+\nabla L(\mathbf{w}) &amp;=\frac{1}{n} \sum_{i = 1}^n (\sigma(\langle \mathbf{w}, \mathbf{x}_i\rangle) - y_i)\mathbf{x}_i\;
+\end{aligned}\]</span>
+.</li>
 </ul>
-<p>For an <strong>M</strong>, you can implement <code>LogisticRegression.grad</code> using a <code>for</code>-loop. For an <strong>E</strong>, your solution should involve no explicit loops. While working on a solution that avoids loops, you might find it useful to at some point convert a tensor <code>v</code> with shape <code>(n,)</code> into a tensor <code>v_</code> with shape <code>(n,1)</code>. The code <code>v_ = v[:, None]</code> will perform this conversion for you.</p>
+<p>The <code>GradientDescentOptimizer</code> class has one method:</p>
+<ul>
+<li><code>GradientDescentOptimizer.step(X, y, alpha, beta)</code> updates the weight vector. At algorithmic step k, it computes new weights:
+<span class="math display">\[\begin{aligned}
+  \mathbf{w}_{k+1} \gets \mathbf{w}_k - \alpha \nabla L(\mathbf{w}_k) + \beta(\mathbf{w}_k - \mathbf{w}_{k-1})
+\end{aligned}\]</span>
+Here, alpha and beta are two learning rate parameters. When beta = 0 we have “regular” gradient descent. In practice, a choice of beta = 0.9 is common.</li>
+</ul>
 </section>
-<section id="implement-gradientdescentoptimizer" class="level2">
-<h2 class="anchored" data-anchor-id="implement-gradientdescentoptimizer">Implement <code>GradientDescentOptimizer</code></h2>
-<p>Next, implement a <code>GradientDescentOptimizer</code> class. For this project, we are going to implement <em>gradient descent with momentum</em>, also known as Spicy Gradient Descent. Let w<sub>k</sub> be the estimate of the weight vector at algorithmic step k. Gradient descent with momentum performs the update equation.</p>
-</section>
-</section>
-<section id="part-b-experiments" class="level1">
-<h1>Part B: Experiments</h1>
-<section id="experimental-data" class="level2">
-<h2 class="anchored" data-anchor-id="experimental-data">Experimental Data</h2>
-<div id="cell-6" class="cell" data-execution_count="277">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TESTING</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classification_data(n_points <span class="op">=</span> <span class="dv">300</span>, noise <span class="op">=</span> <span class="fl">0.2</span>, p_dims <span class="op">=</span> <span class="dv">2</span>):</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> torch.arange(n_points) <span class="op">&gt;=</span> <span class="bu">int</span>(n_points<span class="op">/</span><span class="dv">2</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="fl">1.0</span><span class="op">*</span>y</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> y[:, <span class="va">None</span>] <span class="op">+</span> torch.normal(<span class="fl">0.0</span>, noise, size <span class="op">=</span> (n_points,p_dims))</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> torch.cat((X, torch.ones((X.shape[<span class="dv">0</span>], <span class="dv">1</span>))), <span class="dv">1</span>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> X, y</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>X_rand, y_rand <span class="op">=</span> classification_data(noise <span class="op">=</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="how-to-train-your-model" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-train-your-model">How to Train Your Model</h2>
-<div id="cell-8" class="cell" data-execution_count="281">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># TRAIN the model</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train_and_plot(X, y, alpha, beta, iterations<span class="op">=</span><span class="dv">100</span>):</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    LR <span class="op">=</span> LogisticRegression() </span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    opt <span class="op">=</span> GradientDescentOptimizer(LR)</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    loss_vec <span class="op">=</span> []</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(iterations):</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>       <span class="co"># add other stuff to e.g. keep track of the loss over time. </span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> LR.loss(X, y)</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        loss_vec.append(loss)</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        opt.step(X, y, alpha, beta)</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    plt.plot(torch.arange(<span class="dv">1</span>, <span class="bu">len</span>(loss_vec) <span class="op">+</span><span class="dv">1</span>), loss_vec, color<span class="op">=</span><span class="st">"black"</span>)</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    plt.semilogx()</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    labs <span class="op">=</span> plt.gca().<span class="bu">set</span>(xlabel <span class="op">=</span> <span class="st">"Number of Gradient Descent iterations"</span>, ylabel<span class="op">=</span><span class="st">"loss"</span>)</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>train_and_plot(X_rand, y_rand, alpha<span class="op">=</span><span class="fl">0.1</span>, beta<span class="op">=</span><span class="fl">0.9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
 </section>
 <section id="experiments" class="level2">
 <h2 class="anchored" data-anchor-id="experiments">Experiments</h2>
-<p>Please perform experiments, with careful written explanations, that demonstrate the following statements:</p>
+<section id="generating-experimental-data" class="level3">
+<h3 class="anchored" data-anchor-id="generating-experimental-data">Generating Experimental Data</h3>
+<p>Here is a method to generate data. The parameters are:</p>
+<ul>
+<li><code>n_points</code>: the number of points</li>
+<li><code>p_dims</code>: the number of features</li>
+<li><code>noise</code>: the difficulty of the classification problem</li>
+</ul>
+<div id="cell-7" class="cell" data-execution_count="478">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classification_data(n_points <span class="op">=</span> <span class="dv">300</span>, noise <span class="op">=</span> <span class="fl">0.2</span>, p_dims <span class="op">=</span> <span class="dv">2</span>):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> torch.arange(n_points) <span class="op">&gt;=</span> <span class="bu">int</span>(n_points<span class="op">/</span><span class="dv">2</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="fl">1.0</span><span class="op">*</span>y</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> y[:, <span class="va">None</span>] <span class="op">+</span> torch.normal(<span class="fl">0.0</span>, noise, size <span class="op">=</span> (n_points,p_dims))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> torch.cat((X, torch.ones((X.shape[<span class="dv">0</span>], <span class="dv">1</span>))), <span class="dv">1</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> X, y</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>X_rand, y_rand <span class="op">=</span> classification_data(noise <span class="op">=</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="training-the-model" class="level3">
+<h3 class="anchored" data-anchor-id="training-the-model">Training the Model</h3>
+<p>We’ll create a function that trains the model by iterating over the optimizer’s ‘step’ function.</p>
+<div id="cell-9" class="cell" data-execution_count="479">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train_and_plot(X, y, alpha, beta, iterations<span class="op">=</span><span class="dv">100</span>):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># initialize a ligistic regression and optimizer</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    LR <span class="op">=</span> LogisticRegression() </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    opt <span class="op">=</span> GradientDescentOptimizer(LR)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># to keep track of the loss to plot it</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    loss_vec <span class="op">=</span> []</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(iterations):</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>       <span class="co"># keep track of the loss over time. </span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> LR.loss(X, y)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        loss_vec.append(loss)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="co"># use GradientDescentOptimizer's step function</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        opt.step(X, y, alpha, beta)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot the loss</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    plt.plot(torch.arange(<span class="dv">1</span>, <span class="bu">len</span>(loss_vec) <span class="op">+</span><span class="dv">1</span>), loss_vec, color<span class="op">=</span><span class="st">"black"</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    plt.semilogx()</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    labs <span class="op">=</span> plt.gca().<span class="bu">set</span>(xlabel <span class="op">=</span> <span class="st">"Number of Gradient Descent iterations"</span>, ylabel<span class="op">=</span><span class="st">"loss"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="conduct-some-experiments" class="level2">
+<h2 class="anchored" data-anchor-id="conduct-some-experiments">Conduct Some Experiments!</h2>
 <section id="vanilla-gradient-descent" class="level3">
 <h3 class="anchored" data-anchor-id="vanilla-gradient-descent">1. Vanilla gradient descent:</h3>
-<p>When the number of features <span class="math inline">\(p~dim~=2\)</span>, when alpha is sufficiently small and beta=0, gradient descent for logistic regression converges to a weight vector <code>w</code> that looks visually correct (plot the decision boundary with the data). Furthermore, the loss decreases monotonically (plot the loss over iterations). - This is a good experiment to use to assess whether your implementation in Part A has bugs.</p>
-<div id="cell-11" class="cell" data-execution_count="291">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>X_exp, y_exp <span class="op">=</span> classification_data(n_points <span class="op">=</span> <span class="dv">300</span>, noise <span class="op">=</span> <span class="fl">0.2</span>, p_dims <span class="op">=</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>When the number of features <code>p_dim</code> = 2, alpha is sufficiently small, and beta=0, gradient descent for logistic regression converges to a weight vector <code>w</code> that looks visually correct and the loss decreases monotonically.</p>
+<p>First, lets generate some experimental data with 2 dimensions:</p>
+<div id="cell-12" class="cell" data-execution_count="480">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>X_exp, y_exp <span class="op">=</span> classification_data(n_points <span class="op">=</span> <span class="dv">300</span>, noise <span class="op">=</span> <span class="fl">0.5</span>, p_dims <span class="op">=</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cell-12" class="cell" data-execution_count="292">
+<p>Next, let’s run our train_and_plot method with a sufficiently small value (0.1) for alpha, and with beta = 0.</p>
+<p>This is a basic version of gradient descent without momentum (the beta term).</p>
+<ul>
+<li><p>Having a small alpha value, or learning rate, means that our gradient will converge smoothly without any big jumps or overshooting the minimum.</p></li>
+<li><p>Having a beta value of 0 means that the last term in the GradientDescentOptimizer.step function will evaluate to 0. This means it won’t take into account the old weight vector and add momentum to the term when updating the new weights.</p></li>
+</ul>
+<p>With these parameters, we should see a smooth curve with the loss constantly decreasing as our step function iterates:</p>
+<div id="cell-14" class="cell" data-execution_count="481">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>train_and_plot(X_exp, y_exp, <span class="fl">0.1</span>, <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -345,8 +370,14 @@ window.Quarto = {
 </section>
 <section id="benefits-of-momentum" class="level3">
 <h3 class="anchored" data-anchor-id="benefits-of-momentum">2. Benefits of momentum:</h3>
-<p>On the same data, gradient descent with momentum (e.g.&nbsp;beta = 0.9) can converge to the correct weight vector in fewer iterations than vanilla gradient descent (with beta = 0). Plot the loss over iterations for each method. You may need to experiment with the data and choice of alpha in order to observe speedups due to momentum.</p>
-<div id="cell-14" class="cell" data-execution_count="293">
+<p>On the same data, gradient descent with momentum (e.g.&nbsp;beta = 0.9) can converge to the correct weight vector in fewer iterations than vanilla gradient descent (with beta = 0). Plot the loss over iterations for each method.</p>
+We’ll use the same data (x_exp, y_exp) to show what simply adding momentum can do. By changing our beta term, it adds a whole new dimension for equation (2) in logistic.py. The equation
+<span class="math display">\[\begin{aligned}
+    \mathbf{w}_{k+1} \gets \mathbf{w}_k - \alpha \nabla L(\mathbf{w}_k) + \beta(\mathbf{w}_k - \mathbf{w}_{k-1})
+\end{aligned}\]</span>
+<p>will now have a non-zero last term with beta, which incorporates past weights <span class="math inline">\({w}_{k-1}\)</span> to add momentum.</p>
+<p>By including past weights and present weights to calculate future weights, the momentum term helps converge faster, and we can see this by using the train_and_plot function. Again, the only thing we’ve changed is the beta term from 0 to 0.9</p>
+<div id="cell-16" class="cell" data-execution_count="482">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>train_and_plot(X_exp, y_exp, <span class="fl">0.1</span>, <span class="fl">0.9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -357,10 +388,71 @@ window.Quarto = {
 </div>
 </div>
 </section>
+<section id="overfitting" class="level3">
+<h3 class="anchored" data-anchor-id="overfitting">Overfitting:</h3>
+<p>Let’s generate some data where p_dim &gt; n_points. We’ll do this <strong>twice</strong> with the exact same parameters, the first for a train set and the second for a test set.</p>
+<div id="cell-18" class="cell" data-execution_count="483">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>dims <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>X_train, y_train <span class="op">=</span> classification_data(n_points<span class="op">=</span>points, noise<span class="op">=</span><span class="fl">0.5</span>, p_dims<span class="op">=</span>dims)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>X_test, y_test <span class="op">=</span> classification_data(n_points<span class="op">=</span>points, noise<span class="op">=</span><span class="fl">0.5</span>, p_dims<span class="op">=</span>dims)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We’ll then do an experiment in which we fit a logistic regression model to the data X_train, y_train and obtain 100% accuracy on this training data.</p>
+<div id="cell-20" class="cell" data-execution_count="484">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create our logistic regression and optimizer</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>LR <span class="op">=</span> LogisticRegression()</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>opt <span class="op">=</span> GradientDescentOptimizer(LR)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>train_acc <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># train until we achieve 100% accuracy :0</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (train_acc <span class="op">!=</span> <span class="dv">1</span>):</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    opt.step(X_train, y_train, <span class="fl">0.1</span>, <span class="fl">0.9</span>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># use LogisticRegression.predict method to calculate accuracy</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    train_acc <span class="op">=</span> (<span class="fl">1.0</span><span class="op">*</span>(LR.predict(X_train)<span class="op">==</span>y_train)).mean()</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"training accuracy: "</span>, <span class="bu">float</span>(train_acc))</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"testing accuracy: "</span>, <span class="bu">float</span>((<span class="fl">1.0</span><span class="op">*</span>(LR.predict(X_test) <span class="op">==</span> y_test)).mean()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>training accuracy:  1.0
+testing accuracy:  0.7900000214576721</code></pre>
+</div>
+</div>
+<p>While it depends to a certain degree on the level of noise in the data, we can see that our testing accuracy is considerable lower than training accuracy. This is because using data where the number of features outweighs the number of data points results in overfitting.</p>
+<p>Because there are so many features, the logistic regression model will essential memorize the data, rather than generalize from it - this is the way overfitting works. On new test data the model hasn’t seen, it isn’t as equipped to generalize to these new data points.</p>
+<p>If we use the exact same pipeline, but switch the number of dimensions with the number of data points, we can see our test accuracy skyrocket.</p>
+<div id="cell-22" class="cell" data-execution_count="485">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>dims <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>X_train, y_train <span class="op">=</span> classification_data(n_points<span class="op">=</span>points, noise<span class="op">=</span><span class="fl">0.5</span>, p_dims<span class="op">=</span>dims)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>X_test, y_test <span class="op">=</span> classification_data(n_points<span class="op">=</span>points, noise<span class="op">=</span><span class="fl">0.5</span>, p_dims<span class="op">=</span>dims)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>LR <span class="op">=</span> LogisticRegression()</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>opt <span class="op">=</span> GradientDescentOptimizer(LR)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>train_acc <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (train_acc <span class="op">!=</span> <span class="dv">1</span>):</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    opt.step(X_train, y_train, <span class="fl">0.1</span>, <span class="fl">0.9</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    train_acc <span class="op">=</span> (<span class="fl">1.0</span><span class="op">*</span>(LR.predict(X_train)<span class="op">==</span>y_train)).mean()</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"training accuracy: "</span>, <span class="bu">float</span>(train_acc))</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"testing accuracy: "</span>, <span class="bu">float</span>((<span class="fl">1.0</span><span class="op">*</span>(LR.predict(X_test) <span class="op">==</span> y_test)).mean()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>training accuracy:  1.0
+testing accuracy:  0.9890000224113464</code></pre>
+</div>
+</div>
 </section>
 </section>
-<section id="part-c-writing" class="level1">
-<h1>Part C: Writing</h1>
+<section id="discussion" class="level2">
+<h2 class="anchored" data-anchor-id="discussion">Discussion</h2>
+<p>In this blog post, we implemented Logistic Regression and a Gradient Descent with Momentum optimizer. This was a great way to cement my knowledge about logistic regression and learn the intricacies of the loss, grad, and step functions necessary to make these models and training loops work. The experiments showed the effects of momentum (the beta value), the relationship between number of points and number of dimensions, and visualized how Gradient Descent minimizes loss over the iteration cycle. I can now confidently describe the parameters, inner workings, and outputs of Gradient Descent.</p>
 
 
 </section>

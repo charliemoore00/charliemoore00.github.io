@@ -83,7 +83,7 @@ class LogisticRegression(LinearModel):
         
         *  *  *  *  *  *  *  *  *  *  *  *
 
-        Logistic Loss Equation: 
+        Logistic Loss Equation (1): 
             L(w) = mean[-yi log(sigmoid(si)) - (1-yi)log(1-sigmoid(si))]
         """
 
@@ -93,7 +93,7 @@ class LogisticRegression(LinearModel):
         def sigmoid(z):                 # implementation of sigmoid function
             return 1/(1 + torch.exp(-z))
 
-        # use the logistic loss function to calculate L(w)!
+        # use the logistic loss function (1) to calculate L(w)!
         loss = torch.mean(-y * torch.log(sigmoid(scores)) - (1 - y) * torch.log(1 - sigmoid(scores)))
         return loss
     
@@ -137,7 +137,7 @@ class GradientDescentOptimizer():
 
     def __init__(self, model):
         self.model = model
-        self.w_old = None
+        self.w_old = None   # self.w_old will store Wk-1 for gradient descent with momentum
 
     def step(self, X, y, alpha, beta):
 
@@ -161,19 +161,18 @@ class GradientDescentOptimizer():
         RETURNS:
             Nothing
             Updates the weights self.model.w
-            Use equation:
-            Wk+1 <-- Wk - alpha(grad(Wk)) + beta(Wk - Wk+1)
+            Use equation (2):
+            Wk+1 <-- Wk - alpha(grad(Wk)) + beta(Wk - Wk-1)
         """
 
-        gradient = self.model.grad(X, y)
-        w = self.model.w
-        #if self.w_old is None:
-            #self.w_old = torch.zeros_like(w)
+        gradient = self.model.grad(X, y)    # calculate the gradient
+        w = self.model.w                    # create var for weights
 
-        new_weights = w - alpha*gradient
+        if self.w_old == None:
+            self.w_old = w
 
-        if self.w_old != None:
-            new_weights += beta*(w - self.w_old)
+        # use equation (2) to calculate new weights Wk+1
+        new_weights = w - alpha*gradient + beta*(w - self.w_old)
         
-        self.w_old = w.clone()
-        self.model.w = new_weights
+        self.w_old = w.clone()              # use in next equation as Wk-1
+        self.model.w = new_weights          # update new W
