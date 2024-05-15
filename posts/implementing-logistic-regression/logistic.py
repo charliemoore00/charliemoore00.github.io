@@ -19,11 +19,12 @@ class LinearModel:
         Compute the scores for each data point in the feature matrix X. 
         The formula for the ith entry of s is s[i] = <self.w, x[i]>. 
 
-        ARGUMENTS: 
-            X, torch.Tensor: the feature matrix. X.size() == (n, p), 
-            where n is the number of data points and p is the 
-            number of features. This implementation always assumes 
-            that the final column of X is a constant column of 1s. 
+        ARGS: 
+            X, torch.Tensor: 
+                the feature matrix. X.size() == (n, p), where n is 
+                the number of data points and p is the number of 
+                features. This implementation always assumes that 
+                the final column of X is a constant column of 1s.
 
         RETURNS: 
             s torch.Tensor: vector of scores. s.size() = (n,)
@@ -42,13 +43,16 @@ class LinearModel:
         The prediction for the ith data point is either 0 or 1. 
 
         ARGUMENTS: 
-            X, torch.Tensor: the feature matrix. X.size() == (n, p), 
-            where n is the number of data points and p is the 
-            number of features. This implementation always assumes 
-            that the final column of X is a constant column of 1s. 
+            X, torch.Tensor: 
+                the feature matrix. X.size() == (n, p), where n is 
+                the number of data points and p is the number of 
+                features. This implementation always assumes that 
+                the final column of X is a constant column of 1s. 
 
         RETURNS: 
-            y_hat, torch.Tensor: vector predictions in {0.0, 1.0}. y_hat.size() = (n,)
+            y_hat, torch.Tensor: 
+                vector predictions in {0.0, 1.0}. 
+                y_hat.size() = (n,)
         """
         s = self.score(X)
         return (s > 0).int()
@@ -65,22 +69,27 @@ class LogisticRegression(LinearModel):
         Computes the empirical risk L(w) using the logistic loss function
 
         ARGUMENTS:
-            X, torch.Tensor: the feature matrix. X.size() == (n, p),
-            where n is the number of data points and p is the 
-            number of features. This implementation always assumes
-            that the final column of X is a constant column of 1s.
+            X, torch.Tensor: 
+                the feature matrix. X.size() == (n, p), where n is 
+                the number of data points and p is the number of 
+                features. This implementation always assumes that 
+                the final column of X is a constant column of 1s.
 
             y, torch.Tensor: the target vector. y.size() = (n,). 
             The Possible labels for y are {0, 1}
 
         RETURNS:
             the empirical risk L(w)
-            equation:
-            mean[-yi log(sigmoid(si)) - (1-yi)log(1-sigmoid(si))]
+        
+        *  *  *  *  *  *  *  *  *  *  *  *
+
+        Logistic Loss Equation: 
+            L(w) = mean[-yi log(sigmoid(si)) - (1-yi)log(1-sigmoid(si))]
         """
 
         self.score(X)                   # call our score function to get the weights w
         scores = X @ self.w             # get our score vector s to use in the logistic loss function
+
         def sigmoid(z):                 # implementation of sigmoid function
             return 1/(1 + torch.exp(-z))
 
@@ -95,18 +104,18 @@ class LogisticRegression(LinearModel):
         Computes the gradient of the empirical risk L(w)
 
         ARGUMENTS: 
-            X, torch.Tensor: the feature matrix. X.size() == (n, p),
-            where n is the number of data points and p is the 
-            number of features. This implementation always assumes 
-            that the final column of X is a constant column of 1s. 
+            X, torch.Tensor: 
+                the feature matrix. X.size() == (n, p), where n is 
+                the number of data points and p is the number of 
+                features. This implementation always assumes that 
+                the final column of X is a constant column of 1s.
 
-            y, torch.Tensor: the target vector. y.size() == (n,).
-            The possible labels for y are {0, 1}
+            y, torch.Tensor: 
+                the target vector. y.size() == (n,).
+                The possible labels for y are {0, 1}
 
         RETURNS:
             the gradient of the empirical risk L(w)
-            equation:
-            change of L(w) = mean(sigmoid(si) - yi)xi
             
         """
 
@@ -117,10 +126,6 @@ class LogisticRegression(LinearModel):
         scores = scores[:, None]
         def sigmoid(z):                 # implementation of sigmoid function
             return 1/(1 + torch.exp(-z))
-        
-        #print(y_.shape)
-        #print((sigmoid(scores) - y_).shape)
-        #print(X.shape)
         
         gradients = (sigmoid(scores) - y_) * X
         gradient = torch.mean(gradients, dim=0)
@@ -141,7 +146,11 @@ class GradientDescentOptimizer():
         It performs an update of the weights w
 
         ARGUMENTS:
-            X, torch.Tensor: the feature matrix
+            X, torch.Tensor: 
+                the feature matrix. X.size() == (n, p), where n is 
+                the number of data points and p is the number of 
+                features. This implementation always assumes that 
+                the final column of X is a constant column of 1s.
 
             y, torch.Tensor: the target vector
 
