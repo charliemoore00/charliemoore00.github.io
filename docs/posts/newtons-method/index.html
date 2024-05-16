@@ -238,7 +238,8 @@ window.Quarto = {
 
 
 
-<div id="cell-1" class="cell" data-execution_count="375">
+<p>Newton’s Method for Logistic Regression is implemented in <a href="https://github.com/charliemoore00/charliemoore00.github.io/blob/main/posts/newtons-method/newton.py">newton.py</a></p>
+<div id="cell-2" class="cell" data-execution_count="385">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>load_ext autoreload</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>autoreload <span class="dv">2</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> newton <span class="im">import</span> LogisticRegression, GradientDescentOptimizer, NewtonOptimizer</span>
@@ -286,7 +287,7 @@ w \gets w - \alpha \mathbf{H}(\mathbf{w})^{-1} \nabla L (\mathbf{w})\;
 <li><code>p_dims</code>: the number of features</li>
 <li><code>noise</code>: the difficulty of the classification problem</li>
 </ul>
-<div id="cell-7" class="cell" data-execution_count="376">
+<div id="cell-8" class="cell" data-execution_count="386">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classification_data(n_points <span class="op">=</span> <span class="dv">300</span>, noise <span class="op">=</span> <span class="fl">0.2</span>, p_dims <span class="op">=</span> <span class="dv">2</span>):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> torch.arange(n_points) <span class="op">&gt;=</span> <span class="bu">int</span>(n_points<span class="op">/</span><span class="dv">2</span>)</span>
@@ -304,7 +305,7 @@ w \gets w - \alpha \mathbf{H}(\mathbf{w})^{-1} \nabla L (\mathbf{w})\;
 <p>We’ll create train and plot methods for both Newton’s method and regular Gradient Descent to show differences.</p>
 <section id="gradient-descent-training" class="level4">
 <h4 class="anchored" data-anchor-id="gradient-descent-training">Gradient Descent Training</h4>
-<div id="cell-10" class="cell" data-execution_count="377">
+<div id="cell-11" class="cell" data-execution_count="387">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train_and_plot_gradient_descent(X, y, alpha, beta, iterations<span class="op">=</span><span class="dv">100</span>):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># initialize a logistic regression and gradient descent optimizer</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    LR <span class="op">=</span> LogisticRegression() </span>
@@ -328,7 +329,7 @@ w \gets w - \alpha \mathbf{H}(\mathbf{w})^{-1} \nabla L (\mathbf{w})\;
 </section>
 <section id="newtons-method-training" class="level4">
 <h4 class="anchored" data-anchor-id="newtons-method-training">Newton’s Method Training</h4>
-<div id="cell-12" class="cell" data-execution_count="378">
+<div id="cell-13" class="cell" data-execution_count="388">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train_and_plot_newton_optimizer(X, y, alpha, iterations<span class="op">=</span><span class="dv">100</span>):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># initialize a logistic regression and gradient descent optimizer</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    LR <span class="op">=</span> LogisticRegression() </span>
@@ -352,11 +353,11 @@ w \gets w - \alpha \mathbf{H}(\mathbf{w})^{-1} \nabla L (\mathbf{w})\;
 <section id="experiment-1-when-alpha-is-chosen-appropriately-newtons-method-converges-to-the-correct-choice-of-w." class="level4">
 <h4 class="anchored" data-anchor-id="experiment-1-when-alpha-is-chosen-appropriately-newtons-method-converges-to-the-correct-choice-of-w."><strong>Experiment #1:</strong> When <span class="math inline">\(\alpha\)</span> is chosen appropriately, Newton’s method converges to the correct choice of <strong>w</strong>.</h4>
 <p>First, let’s generate some data:</p>
-<div id="cell-14" class="cell" data-execution_count="379">
+<div id="cell-15" class="cell" data-execution_count="389">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>X_exp, y_exp <span class="op">=</span> classification_data(n_points <span class="op">=</span> <span class="dv">3000</span>, noise <span class="op">=</span> <span class="fl">0.5</span>, p_dims <span class="op">=</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then we’ll train and plot our data with an <span class="math inline">\(\alpha\)</span> value of 200:</p>
-<div id="cell-16" class="cell" data-execution_count="380">
+<div id="cell-17" class="cell" data-execution_count="390">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>train_and_plot_newton_optimizer(X_exp, y_exp, <span class="dv">200</span>, iterations <span class="op">=</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -371,7 +372,7 @@ w \gets w - \alpha \mathbf{H}(\mathbf{w})^{-1} \nabla L (\mathbf{w})\;
 <section id="experiment-2-under-at-least-some-circumstances-newtons-method-can-converge-much-faster-than-standard-gradient-descent" class="level4">
 <h4 class="anchored" data-anchor-id="experiment-2-under-at-least-some-circumstances-newtons-method-can-converge-much-faster-than-standard-gradient-descent"><strong>Experiment #2:</strong> Under at least some circumstances, Newton’s method can converge <em>much</em> faster than standard gradient descent</h4>
 <p>Let’s train and plot both gradient descent <strong>and</strong> Newton’s method on the same data as before, but on 1000 iterations:</p>
-<div id="cell-19" class="cell" data-execution_count="381">
+<div id="cell-20" class="cell" data-execution_count="391">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># gradient descent</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>train_and_plot_gradient_descent(X_exp, y_exp, <span class="fl">0.1</span>, <span class="fl">0.9</span>, iterations <span class="op">=</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -382,7 +383,7 @@ w \gets w - \alpha \mathbf{H}(\mathbf{w})^{-1} \nabla L (\mathbf{w})\;
 </div>
 </div>
 </div>
-<div id="cell-20" class="cell" data-execution_count="382">
+<div id="cell-21" class="cell" data-execution_count="392">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Newton's method</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>train_and_plot_newton_optimizer(X_exp, y_exp, <span class="dv">2000</span>, iterations<span class="op">=</span><span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -398,17 +399,23 @@ w \gets w - \alpha \mathbf{H}(\mathbf{w})^{-1} \nabla L (\mathbf{w})\;
 <section id="experiment-3-if-alpha-is-too-large-newtons-method-fails-to-converge." class="level4">
 <h4 class="anchored" data-anchor-id="experiment-3-if-alpha-is-too-large-newtons-method-fails-to-converge."><strong>Experiment #3:</strong> If <span class="math inline">\(\alpha\)</span> is too large, Newton’s method fails to converge.</h4>
 <p>Let’s generate some data of higher dimensionality:</p>
-<div id="cell-24" class="cell" data-execution_count="383">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> classification_data(n_points <span class="op">=</span> <span class="dv">3000</span>, noise <span class="op">=</span> <span class="fl">0.5</span>, p_dims <span class="op">=</span> <span class="dv">3</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>train_and_plot_newton_optimizer(X, y, <span class="dv">8000</span>, iterations<span class="op">=</span><span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-25" class="cell" data-execution_count="409">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> classification_data(n_points <span class="op">=</span> <span class="dv">100</span>, noise <span class="op">=</span> <span class="fl">0.5</span>, p_dims <span class="op">=</span> <span class="dv">2</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>train_and_plot_newton_optimizer(X, y, <span class="dv">2000</span>, iterations<span class="op">=</span><span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>_LinAlgError: linalg.inv: The diagonal element 1 is zero, the inversion could not be completed because the input matrix is singular.</code></pre>
 </div>
 </div>
-
-
 </section>
 </section>
+</section>
+<section id="request-for-help" class="level1">
+<h1>REQUEST FOR HELP:</h1>
+<p>While trying several combinations of different values for n_points, p_dims, and alpha, I am unable to create a plot that doesn’t converge. I am often receiving the following error message:</p>
+<p>**_LinAlgError: linalg.inv: The diagonal element 1 is zero, the inversion could not be completed because the input matrix is singular.**</p>
+<p>Is my implementation of NewtonOptimizer at fault? Or have I just not found a working combination of those variables?</p>
+
+
 </section>
 
 </main> <!-- /main -->
