@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/newtons-method/index.html",
       "/posts/implementing-logistic-regression/index.html",
       "/posts/whose-costs/index.html",
       "/posts/penguins-blog-post/index.html"
