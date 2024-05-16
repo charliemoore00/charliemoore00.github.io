@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/deep-music-genre-classification/index.html",
       "/posts/newtons-method/index.html",
       "/posts/implementing-logistic-regression/index.html",
       "/posts/whose-costs/index.html",
