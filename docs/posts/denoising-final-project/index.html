@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Charlie Moore">
+<meta name="dcterms.date" content="2024-05-17">
+<meta name="description" content="Using Neural Networks to Classify Background Noise in Audio Files">
+
+<title>Machine Learning Blog - Denoising Final Project</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>
+
+      .quarto-title-block .quarto-title-banner h1,
+      .quarto-title-block .quarto-title-banner h2,
+      .quarto-title-block .quarto-title-banner h3,
+      .quarto-title-block .quarto-title-banner h4,
+      .quarto-title-block .quarto-title-banner h5,
+      .quarto-title-block .quarto-title-banner h6
+      {
+        color: white;
+      }
+
+      .quarto-title-block .quarto-title-banner {
+        color: white;
+background-image: url(../../img/landscape.png);
+background-size: cover;
+      }
+</style>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Machine Learning Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/charliemoore00/"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/charlie-moore-b55340214/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Denoising Final Project</h1>
+                  <div>
+        <div class="description">
+          Using Neural Networks to Classify Background Noise in Audio Files
+        </div>
+      </div>
+                </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Charlie Moore </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 17, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="denoising" class="level1">
+<h1>Denoising</h1>
+<section id="charlie-moore-and-jeff-blake" class="level3">
+<h3 class="anchored" data-anchor-id="charlie-moore-and-jeff-blake">Charlie Moore and Jeff Blake</h3>
+</section>
+</section>
+<section id="abstract" class="level1">
+<h1>Abstract</h1>
+<p>For this project, we addressed the problem of audio files containing background noise. We worked with data containing clean speech files and also those same speech files with added background noise, and we created a neural network model to classify a wav file as noisy or not. Overall, our model was very successful, obtaining an evaluation rate on test data of <strong>98.9%</strong>.</p>
+<p>Github repository: <a href="https://github.com/jblake05/CS0451_Denoising">denoising</a></p>
+</section>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<!-- 
+Your introduction should describe the big-picture problem that you aimed to address in your project. What’s the problem to be solved, and why is it important? Who has tried solving this problem already, and what did they do? I would expect most introductions to reference no fewer than 2 scholarly studies that attempted similar tasks, although 5 is probably a better target.
+
+You may be able to recycle some content from your project proposal for your introduction.
+
+When citing scholarly studies in a blog post, please use Quarto citations. For a quick overview, see the appendix on references in Quarto. -->
+<p>This project aims to address the first step in denoising audio signals: classifying the presence of noise. In particular, we aimed to classify added noise in speech signals. Denoising can be used in various ways, essential in providing cleaner signals in music production, restoring historical recordings <span class="citation" data-cites="moliner_two-stage_2022">Moliner and Välimäki (<a href="#ref-moliner_two-stage_2022" role="doc-biblioref">2022</a>)</span>, or even studying our environment (as in the research on noise filtering for beehives from <span class="citation" data-cites="varkonyi_dynamic_2023">Várkonyi, Seixas, and Horváth (<a href="#ref-varkonyi_dynamic_2023" role="doc-biblioref">2023</a>)</span>). Previous attempts at audio classification and denoising use various methods of processing signals. A study by <span class="citation" data-cites="mcloughlin_timefrequency_2020">McLoughlin et al. (<a href="#ref-mcloughlin_timefrequency_2020" role="doc-biblioref">2020</a>)</span> used a combination of a spectrogram and a cochleogram (both 2D representations of an audio signal) alongside convolutional and fully connected layers for their model. Similarly, <span class="citation" data-cites="verhaegh_algorithms_2004">Verhaegh et al. (<a href="#ref-verhaegh_algorithms_2004" role="doc-biblioref">2004</a>)</span> tests the efficacy of different processing techniques, finding that running a signal through a sequence of filterbanks achieves the highest accuracy overall (90% across different classification tasks including noise). They also found the use of a mel-frequency cepstrum (MFCC) to be highly effective at 85% average accuracy.</p>
+</section>
+<section id="values-statement" class="level1">
+<h1>Values Statement</h1>
+<p>We expect the users of our project to be engineers and/or musicians. This project is the groundwork for Denoising - removing the background noise from speech audio, resulting in clean, understandable audio. This is incredibly helpful not only for music, but any applications that convert speech to digital audio - for example: enhancing phone call quality, and speech-to-text accuracy, which many people will benefit from.</p>
+<p>While we hope these applications will only improve the quality of life for people using these tools, we must understand a potential source of bias in the data: all the audio clips are spoken in English. If this is the only project/data used in denoising applications and is applied to technology used by those who speak other languages, it could potentially diminish the quality of their audio.</p>
+<p>Our motivation for this project stems from our interest in electronic music. Vocals are particularly tricky to mix well (sound good within a track), and it makes a world of difference when the incoming audio file has been recorded at a high quality. Historically the way to accomplish this is with high-grade equipment, which can be very expensive. Using denoising software is a cost-effective alternative for clean vocal files for producing music.</p>
+<p>The core question of this project is: would the world be a more equitable, just, joyful, peaceful, or sustainable place based on this technology? We believe that as long as more audio of all languages is incorporated, the answer is <strong>yes.</strong></p>
+</section>
+<section id="materials-and-methods" class="level1">
+<h1>Materials and Methods</h1>
+<section id="the-data" class="level3">
+<h3 class="anchored" data-anchor-id="the-data">The Data</h3>
+<!-- Include some discussion of where it came from, who collected it (include a citation), how it was collected, and what each row represents (a person, an environmental event, a body of text, etc) Please also include a discussion of potential limitations in the data: who or what is represented, and who or what isn’t?
+
+In structuring your description of the data, I encourage you to address many of the questions outlined in Gebru et al. (2021), although it is not necessary for you to write a complete data sheet for your data set. -->
+<p>Our project is based on the data from the Microsoft Scalable Noisy Speech Dataset <span class="citation" data-cites="reddy2019scalable">Reddy et al. (<a href="#ref-reddy2019scalable" role="doc-biblioref">2019</a>)</span>. This dataset obtained access to two speech datasets by license, one from the University of Edinburgh <span class="citation" data-cites="inproceedings">Veaux, Yamagishi, and King (<a href="#ref-inproceedings" role="doc-biblioref">2013</a>)</span> (where speakers across Great Britain were recruited by advertisement) and one from Graz University <span class="citation" data-cites="Pirker2011APT">Pirker et al. (<a href="#ref-Pirker2011APT" role="doc-biblioref">2011</a>)</span> (recruiting native English speakers through advertisements at various institutions). Similarly, MS-SNSD obtained noise samples by license from freesound.org (a website which allows for user submitted sound samples) and from the DEMAND dataset by <span class="citation" data-cites="thiemann_demand_2013">Thiemann, Ito, and Vincent (<a href="#ref-thiemann_demand_2013" role="doc-biblioref">2013</a>)</span>. As such, these samples were created by researchers or freesound.org users recording their environments (traffic, public noising, appliances humming, etc.). The MS-SNSD provides a Python program to automatically combine the speech and noise data.</p>
+<p>After reading in the data from a wav file, we converted it to a mels-spectrogram. Each row (or 2D array before flattening) of the data represents one audio file as a mels-spectrogram. These audio signals are 10 seconds of speech, either clean (no noise) or accompanied with added background noise. One limitation that exists with this dataset is that it does not contain recordings of languages other than English. As such, training a model on it does not guarantee its usefulness across languages.</p>
+<p>Here is a sample image of a Mel Spectrogram:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mel_labeled.png" class="img-fluid figure-img"></p>
+<figcaption>Mel</figcaption>
+</figure>
+</div>
+</section>
+<section id="our-approach" class="level3">
+<h3 class="anchored" data-anchor-id="our-approach">Our Approach</h3>
+<!-- This is the primary section where you should describe what you did. Carefully describe:
+
+- What features of your data you used as predictors for your models, and what features (if any) you used as targets.
+- Whether you subset your data in any way, and for what reasons.
+- What model(s) you used trained on your data, and how you chose them.
+- How you trained your models, and on what hardware.
+- How you evaluated your models (loss, accuracy, etc), and the size of your test set.
+- If you performed an audit for bias, how you approached this and what metrics you used. -->
+<p>In the processing of our data, we used the mels-spectrogram representation of 160000 sample audio files (cut off at exactly 10 seconds for consistent sizing). In converting these audio files to spectrograms, we had data instances of size 128 x 313 pixels, or 40064 features per instance of data. For our targets, we just created a vector that represented whether or not an audio sample had noise added (1 if noise is present, 0 if the signal is clean). We used a subset of our data (around ~3200 audio files) in order to limit training time. Our model was trained on Google Colab using the T4 GPU when available (and its default CPU when not); our model consisted of a convolutional layer, and linear layer. While we tried to add more complexity to our model, we immediately saw a dip in accuracy (and our accuracy results with the current model were already promising). We evaluated our model in terms of accuracy on a test set of 662.</p>
+</section>
+</section>
+<section id="results" class="level1">
+<h1>Results</h1>
+<p>Our neural network model yielded <strong>0.989</strong> testing accuracy, after going through 10 training epochs and having 1.000 training accuracy. Compared to a linear model we implemented with only a linear layer that scored 0.941 testing accuracy, our neural network model with a convolution layer and non-linear layer is much better.</p>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>Our project classified audio files as containing background noise or not with a highly accurate rate on unseen test data, yielding a successful neural network model. The data from Microsoft made it easy to integrate with python’s audio packages, and allowed us to customize the noisy files to our specifications.</p>
+<p>By converting 1-dimensional wav files into 2-dimensional Mel spectrograms, we were able to do image classification and use convolutional layers. This data is especially strong because it shows both amplitude and frequency over time, rather than just amplitude as a regular wav file does. The actual model pipeline was surprisingly simple, using only a 2d convolution layer, non-linear function, then flattening and a final linear layer to condense to the two possible outcomes.</p>
+<p>In the future, the changes we would like to see most are A) adding other languages to the dataset. By including other languages in the dataset, our model trains on more diverse data and then is able to recognize not just English, but any human-spoken language. This will ensure that in future applications that use this model, all languages will be treated equally. If the data fails to include more diversity in the languages and the model is applied to all languages, it could work against people and diminish the audio quality rather than improve it. Additionally, if we had more time we could B) remove the background noise, yielding clean speech files. This is the ultimate goal that this model could yield.</p>
+<p>The effectiveness of our model shows that denoising applications and cleaner digital audio are right around the corner.</p>
+</section>
+<section id="group-contribution-statement" class="level1">
+<h1>Group Contribution Statement</h1>
+<section id="charlie" class="level4">
+<h4 class="anchored" data-anchor-id="charlie">Charlie</h4>
+<p>We split up the writing fairly evenly - on the proposal, I did the planned deliverables, ethics statement, and timeline, and Jeff did the abstract, motivation/question, resources required, and risk statement. On the blog post I did the abstract, values statement, results, and conclusion, and Jeff did the introduction, materials and methods. For initial visualization, Jeff created a Fourier Transform to plot frequency, and I made a soundwave plot of amplitude. We did some pair programming to vectorize the data, taking it from wav files to Mel spectrograms to tensors ready to be used as training data - but Jeff led the research and implementation of Mel spectrograms. I transferred code to Google Colab and devised a way to use command line tools to import our data and execute the noise file synthesization. Jeff set up a linear model and neural network pipeline, and I did lots of experimentation to increase our accuracy - ultimately ending up with an extremely simple pipeline. I also designed the presentation slideshow.</p>
+</section>
+<section id="jeff" class="level4">
+<h4 class="anchored" data-anchor-id="jeff">Jeff</h4>
+<p>Focused more on the data processing portion of the source code. This included the processing of the data into mels-spectrograms and the creation of tensors for the data. In doing so, they also visualized the test mels spectrogram value. They also led in the writing of the introduction and the materials and methods sections of the blog post. Further, they fixed bugs that were causing roadblocks in the training process, like making sure that the data was of the correct dimensionality (e.g.&nbsp;adding in an extra dimension for the one color channel the data has).</p>
+</section>
+</section>
+<section id="personal-reflection" class="level1">
+<h1>Personal Reflection</h1>
+<p>This was a very successful project. Not only did we achieve a high classification rate on our model but I learned a lot about digital audio and Google Colab, further solidified my knowledge on data vectorization, torch, and neural networks, and had fun doing it!</p>
+<p>I feel great about what we achieved - for the group, we met our initial goal big time. Individually, I exceeded all the goals I set in relation to the project at the beginning of the semester. These were mostly in regards to the presentation of the project - writing the proposal, blog post, and presentation. We and Jeff had great communication - splitting up work evenly when it was convenient, meeting together at key points in the process, and doing some partner programming.</p>
+<p>It was great to have some unique data to work with that we hadn’t tackled in class. I learned about Mel spectrograms and we made the decision to classify those as images rather than wav files, which I think is really cool. I also learned a lot about Google Colab - a resource I’ve never used before. I learned about GPUs (even buying some GPU tokens when we were down to the wire with time) and importing data into Colab. It was a fun process to play around with the neural net pipeline, although I’m disappointed that I wasn’t able to significantly improve it with more layers, I just had to mess with the parameters of a simple layer and nonlinear function.</p>
+<p>I am very excited to continue working with audio in the future. I’m very interested in digital audio, and I’m happy that I’ve added a machine learning layer (haha) to my knowledge of this area.</p>
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-mcloughlin_timefrequency_2020" class="csl-entry" role="listitem">
+McLoughlin, Ian, Zhipeng Xie, Yan Song, Huy Phan, and Ramaswamy Palaniappan. 2020. <span>“Time–<span>Frequency</span> <span>Feature</span> <span>Fusion</span> for <span>Noise</span> <span>Robust</span> <span>Audio</span> <span>Event</span> <span>Classification</span>.”</span> <em>Circuits, Systems, and Signal Processing</em> 39 (3): 1672–87. <a href="https://doi.org/10.1007/s00034-019-01203-0">https://doi.org/10.1007/s00034-019-01203-0</a>.
+</div>
+<div id="ref-moliner_two-stage_2022" class="csl-entry" role="listitem">
+Moliner, Eloi, and Vesa Välimäki. 2022. <span>“A <span>Two</span>-<span>Stage</span> <span>U</span>-<span>Net</span> for <span>High</span>-<span>Fidelity</span> <span>Denoising</span> of <span>Historical</span> <span>Recordings</span>.”</span> <a href="https://doi.org/10.48550/ARXIV.2202.08702">https://doi.org/10.48550/ARXIV.2202.08702</a>.
+</div>
+<div id="ref-Pirker2011APT" class="csl-entry" role="listitem">
+Pirker, Gregor, Michael Wohlmayr, tefan Petrík, and Franz Pernkopf. 2011. <span>“A Pitch Tracking Corpus with Evaluation on Multipitch Tracking Scenario.”</span> In <em>Interspeech</em>. <a href="https://api.semanticscholar.org/CorpusID:13012536">https://api.semanticscholar.org/CorpusID:13012536</a>.
+</div>
+<div id="ref-reddy2019scalable" class="csl-entry" role="listitem">
+Reddy, Chandan KA, Ebrahim Beyrami, Jamie Pool, Ross Cutler, Sriram Srinivasan, and Johannes Gehrke. 2019. <span>“A Scalable Noisy Speech Dataset and Online Subjective Test Framework.”</span> <em>Proc. Interspeech 2019</em>, 1816–20.
+</div>
+<div id="ref-thiemann_demand_2013" class="csl-entry" role="listitem">
+Thiemann, Joachim, Nobutaka Ito, and Emmanuel Vincent. 2013. <span>“Demand: <span>A</span> <span>Collection</span> <span>Of</span> <span>Multi</span>-<span>Channel</span> <span>Recordings</span> <span>Of</span> <span>Acoustic</span> <span>Noise</span> <span>In</span> <span>Diverse</span> <span>Environments</span>.”</span> [object Object]. <a href="https://doi.org/10.5281/ZENODO.1227120">https://doi.org/10.5281/ZENODO.1227120</a>.
+</div>
+<div id="ref-varkonyi_dynamic_2023" class="csl-entry" role="listitem">
+Várkonyi, Dániel Tamás, José Luis Seixas, and Tomáš Horváth. 2023. <span>“Dynamic Noise Filtering for Multi-Class Classification of Beehive Audio Data.”</span> <em>Expert Systems with Applications</em> 213 (March): 118850. <a href="https://doi.org/10.1016/j.eswa.2022.118850">https://doi.org/10.1016/j.eswa.2022.118850</a>.
+</div>
+<div id="ref-inproceedings" class="csl-entry" role="listitem">
+Veaux, Christophe, Junichi Yamagishi, and Simon King. 2013. <span>“The Voice Bank Corpus: Design, Collection and Data Analysis of a Large Regional Accent Speech Database.”</span> In, 1–4. <a href="https://doi.org/10.1109/ICSDA.2013.6709856">https://doi.org/10.1109/ICSDA.2013.6709856</a>.
+</div>
+<div id="ref-verhaegh_algorithms_2004" class="csl-entry" role="listitem">
+Verhaegh, Wim F. J., Emile Aarts, Jan Korst, and Frank Toolenaar, eds. 2004. <em>Algorithms in <span>Ambient</span> <span>Intelligence</span></em>. Vol. 2. Philips <span>Research</span>. Dordrecht: Springer Netherlands. <a href="https://doi.org/10.1007/978-94-017-0703-9">https://doi.org/10.1007/978-94-017-0703-9</a>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
