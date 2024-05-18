@@ -239,7 +239,10 @@ window.Quarto = {
 
 
 <p>Newton’s Method for Logistic Regression is implemented in <a href="https://github.com/charliemoore00/charliemoore00.github.io/blob/main/posts/newtons-method/newton.py">newton.py</a></p>
-<div id="cell-2" class="cell" data-execution_count="385">
+<section id="abstract" class="level2">
+<h2 class="anchored" data-anchor-id="abstract">Abstract</h2>
+<p>This blog post contains an implementation of Newton’s Method for Logistic Regression, located in the newton.py class available above. This is an alternative optimizer to Gradient Descent. This blog post will conduct a few experiments about how Newton’s Method compares to Gradient Descent in terms of the speed it takes to converge, and also the computation cost.</p>
+<div id="cell-3" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>load_ext autoreload</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>autoreload <span class="dv">2</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> newton <span class="im">import</span> LogisticRegression, GradientDescentOptimizer, NewtonOptimizer</span>
@@ -250,9 +253,6 @@ window.Quarto = {
   %reload_ext autoreload</code></pre>
 </div>
 </div>
-<section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>This blog posts expands on implementing logistic regression and gradient descent with momentum. This post introduces Newton’s Method as an alternative to gradient descent optimization.</p>
 </section>
 <section id="part-a-implement-newtonoptimizer" class="level2">
 <h2 class="anchored" data-anchor-id="part-a-implement-newtonoptimizer">Part A: Implement <code>NewtonOptimizer</code></h2>
@@ -274,6 +274,7 @@ w \gets w - \alpha \mathbf{H}(\mathbf{w})^{-1} \nabla L (\mathbf{w})\;
 </section>
 <section id="part-b-experimenting" class="level2">
 <h2 class="anchored" data-anchor-id="part-b-experimenting">Part B: Experimenting</h2>
+<p>Let’s conduct a few experiments to show the functionality of Newton’s Method, and how it compares to Gradient Descent.</p>
 <ol type="1">
 <li>When <span class="math inline">\(\alpha\)</span> is chosen appropriately, Newton’s method converges to the correct choice of <strong>w</strong>.</li>
 <li>Under at least some circumstances, Newton’s method can converge <em>much</em> faster than standard gradient descent, in the sense of decreasing the empirical risk.</li>
@@ -287,7 +288,7 @@ w \gets w - \alpha \mathbf{H}(\mathbf{w})^{-1} \nabla L (\mathbf{w})\;
 <li><code>p_dims</code>: the number of features</li>
 <li><code>noise</code>: the difficulty of the classification problem</li>
 </ul>
-<div id="cell-8" class="cell" data-execution_count="386">
+<div id="cell-8" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> classification_data(n_points <span class="op">=</span> <span class="dv">300</span>, noise <span class="op">=</span> <span class="fl">0.2</span>, p_dims <span class="op">=</span> <span class="dv">2</span>):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> torch.arange(n_points) <span class="op">&gt;=</span> <span class="bu">int</span>(n_points<span class="op">/</span><span class="dv">2</span>)</span>
@@ -305,7 +306,7 @@ w \gets w - \alpha \mathbf{H}(\mathbf{w})^{-1} \nabla L (\mathbf{w})\;
 <p>We’ll create train and plot methods for both Newton’s method and regular Gradient Descent to show differences.</p>
 <section id="gradient-descent-training" class="level4">
 <h4 class="anchored" data-anchor-id="gradient-descent-training">Gradient Descent Training</h4>
-<div id="cell-11" class="cell" data-execution_count="387">
+<div id="cell-11" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train_and_plot_gradient_descent(X, y, alpha, beta, iterations<span class="op">=</span><span class="dv">100</span>):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># initialize a logistic regression and gradient descent optimizer</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    LR <span class="op">=</span> LogisticRegression() </span>
@@ -329,7 +330,7 @@ w \gets w - \alpha \mathbf{H}(\mathbf{w})^{-1} \nabla L (\mathbf{w})\;
 </section>
 <section id="newtons-method-training" class="level4">
 <h4 class="anchored" data-anchor-id="newtons-method-training">Newton’s Method Training</h4>
-<div id="cell-13" class="cell" data-execution_count="388">
+<div id="cell-13" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train_and_plot_newton_optimizer(X, y, alpha, iterations<span class="op">=</span><span class="dv">100</span>):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># initialize a logistic regression and gradient descent optimizer</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    LR <span class="op">=</span> LogisticRegression() </span>
@@ -353,11 +354,11 @@ w \gets w - \alpha \mathbf{H}(\mathbf{w})^{-1} \nabla L (\mathbf{w})\;
 <section id="experiment-1-when-alpha-is-chosen-appropriately-newtons-method-converges-to-the-correct-choice-of-w." class="level4">
 <h4 class="anchored" data-anchor-id="experiment-1-when-alpha-is-chosen-appropriately-newtons-method-converges-to-the-correct-choice-of-w."><strong>Experiment #1:</strong> When <span class="math inline">\(\alpha\)</span> is chosen appropriately, Newton’s method converges to the correct choice of <strong>w</strong>.</h4>
 <p>First, let’s generate some data:</p>
-<div id="cell-15" class="cell" data-execution_count="389">
+<div id="cell-15" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>X_exp, y_exp <span class="op">=</span> classification_data(n_points <span class="op">=</span> <span class="dv">3000</span>, noise <span class="op">=</span> <span class="fl">0.5</span>, p_dims <span class="op">=</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then we’ll train and plot our data with an <span class="math inline">\(\alpha\)</span> value of 200:</p>
-<div id="cell-17" class="cell" data-execution_count="390">
+<div id="cell-17" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>train_and_plot_newton_optimizer(X_exp, y_exp, <span class="dv">200</span>, iterations <span class="op">=</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -372,7 +373,7 @@ w \gets w - \alpha \mathbf{H}(\mathbf{w})^{-1} \nabla L (\mathbf{w})\;
 <section id="experiment-2-under-at-least-some-circumstances-newtons-method-can-converge-much-faster-than-standard-gradient-descent" class="level4">
 <h4 class="anchored" data-anchor-id="experiment-2-under-at-least-some-circumstances-newtons-method-can-converge-much-faster-than-standard-gradient-descent"><strong>Experiment #2:</strong> Under at least some circumstances, Newton’s method can converge <em>much</em> faster than standard gradient descent</h4>
 <p>Let’s train and plot both gradient descent <strong>and</strong> Newton’s method on the same data as before, but on 1000 iterations:</p>
-<div id="cell-20" class="cell" data-execution_count="391">
+<div id="cell-20" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># gradient descent</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>train_and_plot_gradient_descent(X_exp, y_exp, <span class="fl">0.1</span>, <span class="fl">0.9</span>, iterations <span class="op">=</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -383,7 +384,7 @@ w \gets w - \alpha \mathbf{H}(\mathbf{w})^{-1} \nabla L (\mathbf{w})\;
 </div>
 </div>
 </div>
-<div id="cell-21" class="cell" data-execution_count="392">
+<div id="cell-21" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Newton's method</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>train_and_plot_newton_optimizer(X_exp, y_exp, <span class="dv">2000</span>, iterations<span class="op">=</span><span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -398,22 +399,41 @@ w \gets w - \alpha \mathbf{H}(\mathbf{w})^{-1} \nabla L (\mathbf{w})\;
 </section>
 <section id="experiment-3-if-alpha-is-too-large-newtons-method-fails-to-converge." class="level4">
 <h4 class="anchored" data-anchor-id="experiment-3-if-alpha-is-too-large-newtons-method-fails-to-converge."><strong>Experiment #3:</strong> If <span class="math inline">\(\alpha\)</span> is too large, Newton’s method fails to converge.</h4>
-<p>Let’s generate some data of higher dimensionality:</p>
-<div id="cell-25" class="cell" data-execution_count="409">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> classification_data(n_points <span class="op">=</span> <span class="dv">100</span>, noise <span class="op">=</span> <span class="fl">0.5</span>, p_dims <span class="op">=</span> <span class="dv">2</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>train_and_plot_newton_optimizer(X, y, <span class="dv">2000</span>, iterations<span class="op">=</span><span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Let’s set the alpha to a really high number and see what happens, keeping the same parameters as before:</p>
+<div id="cell-25" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>train_and_plot_newton_optimizer(X_exp, y_exp, <span class="dv">9999</span>, iterations<span class="op">=</span><span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
-<pre><code>_LinAlgError: linalg.inv: The diagonal element 1 is zero, the inversion could not be completed because the input matrix is singular.</code></pre>
+<pre><code>RuntimeError: torch.linalg.inv: The diagonal element 1 is zero, the inversion could not be completed because the input matrix is singular.</code></pre>
 </div>
 </div>
+<p>We end up getting the following error: &gt; RuntimeError: torch.linalg.inv: The diagonal element 1 is zero, the inversion could not be completed because the input matrix is singular.</p>
+<p>Since our alpha value was so large, when we ran the <code>NewtonOptimizer.step</code> method, the updates to the weights were so large that it diverged instead of converged.</p>
 </section>
 </section>
 </section>
-<section id="request-for-help" class="level1">
-<h1>REQUEST FOR HELP:</h1>
-<p>While trying several combinations of different values for n_points, p_dims, and alpha, I am unable to create a plot that doesn’t converge. I am often receiving the following error message:</p>
-<p>**_LinAlgError: linalg.inv: The diagonal element 1 is zero, the inversion could not be completed because the input matrix is singular.**</p>
-<p>Is my implementation of NewtonOptimizer at fault? Or have I just not found a working combination of those variables?</p>
+<section id="part-c-operation-counting" class="level2">
+<h2 class="anchored" data-anchor-id="part-c-operation-counting">Part C: Operation Counting</h2>
+<p>In high-dimensional optimization, the number of features p can be very large. This can be a problem for Newton’s method, because the operation of inverting a <span class="math inline">\(p\times p\)</span> matrix requires <span class="math inline">\(O(p^\gamma)\)</span> operations for some <span class="math inline">\(2 \leq \gamma &lt;3\)</span>. Multiplying the gradient by the Hessian also requires O(p^2) operations.</p>
+<p>Assume that it costs c computational units to compute the loss <span class="math inline">\(L\)</span>, <span class="math inline">\(2c\)</span> units to compute the gradient <span class="math inline">\(\nabla L\)</span>, and <span class="math inline">\(pc\)</span> units to compute the Hessian. Suppose further that it costs <span class="math inline">\(k_1p^\gamma\)</span> units to invert a <span class="math inline">\(p\times p\)</span> matrix and <span class="math inline">\(k_2p^{2}\)</span> units to perform the matrix-vector multiplication required by Newton’s method.</p>
+<p>Finally, suppose that Newton’s method converges to an adequate solution in <span class="math inline">\(t_\mathrm{nm}\)</span> steps, while gradient descent converges to an adequate solution in <span class="math inline">\(t_\mathrm{gd}\)</span> steps.</p>
+<p>Under these assumptions, write expressions describing the total computational costs of Newton’s method as compared to gradient descent. How much smaller must <span class="math inline">\(t_\mathrm{nm}\)</span> be than <span class="math inline">\(t_\mathrm{gd}\)</span> in order to ensure that Newton’s method will require fewer computational units to complete? When p becomes very large, is using Newton’s method ever going to pay off?</p>
+<p>To answer this, let’s break down the computational cost of Newton’s Method and Gradient Descent:</p>
+<section id="newtons-method" class="level3">
+<h3 class="anchored" data-anchor-id="newtons-method">Newton’s Method:</h3>
+<p>Cost of computation for: - Loss <span class="math inline">\(L\)</span>: <span class="math inline">\(c\)</span> - Gradient <span class="math inline">\(\nabla L\)</span>: <span class="math inline">\(2c\)</span> - Hessian matrix: <span class="math inline">\(pc\)</span> - Inverting Hessian matrix: <span class="math inline">\(k_1p^\gamma\)</span> - matrix-vector multiplication: <span class="math inline">\(k_2p^{2}\)</span> Total iterations: <span class="math inline">\(t_\mathrm{nm}\)</span></p>
+<p>We can consolidate this into the expression: <span class="math inline">\(Newton's = t_\mathrm{nm} * (3c + pc + k_1p^\gamma + k_2p^{2})\)</span></p>
+</section>
+<section id="gradient-descent" class="level3">
+<h3 class="anchored" data-anchor-id="gradient-descent">Gradient Descent</h3>
+<p>Cost of computation for: - Loss <span class="math inline">\(L\)</span>: <span class="math inline">\(c\)</span> - Gradient <span class="math inline">\(\nabla L\)</span>: <span class="math inline">\(2c\)</span> Total iterations: <span class="math inline">\(t_\mathrm{gd}\)</span></p>
+<p>We can consolidate this into the expression: <span class="math inline">\(GradientD = t_\mathrm{gd} * (2c)\)</span></p>
+<p>We are looking for <span class="math inline">\(Newton's &lt; GradientD\)</span>. We are looking for big Oh values here, so we can just take into account the largest terms - in this case, <span class="math inline">\(k_1p^\gamma + k_2p^{2}\)</span>. This means that the number of iterations for Newton’s Method <span class="math inline">\(t_\mathrm{nm}\)</span> must be around the order of <span class="math inline">\(p^{2}\)</span> times smaller than <span class="math inline">\(t_\mathrm{gd}\)</span> to converge at less computational cost.</p>
+<p>When p becomes vey large, <span class="math inline">\(p^{2}\)</span> becomes extremely large and Newton’s Method will be less and less likely to pay off. Thus Newton’s Method is better for low-dimensional problems.</p>
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>In this blog post, we’ve explored how Newton’s Method for Logistic Regression can converge much faster in the right case. However, there are other cases where if the dimension is too large, the computational cost can be much higher than gradient descent. I enjoyed exploring logistic regression more in depth and looking into different kinds of optimizers and the way they compare - not only in iterations it takes to converge, but also computational cost.</p>
 
 
 </section>
