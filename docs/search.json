@@ -4,7 +4,7 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "Hi! I’m Charlie, a CS student graduating this May from Middlebury College.\nThis website is dedicated to showing my learning in this semester’s Machine Learning course through a series of blog posts - these are short research projects aimed at polishing our skills working with data and constructing models, as well as thinking about the social and cultural impacts and bias present in the machine learning world."
+    "text": "Hi! I’m Charlie, a recent graduate of Middlebury College with a B.A. in Computer Science.\nThis website is dedicated to showing my learning in the spring semester’s Machine Learning course through a series of blog posts - these are short research projects aimed at polishing our skills in working with data and constructing models, as well as thinking about the social and cultural impacts and bias present in the machine learning world.\nJeff Blake and I worked on ‘Denoising’ as our final project in the course, where we trained a neural network model to classify the presence of background noise in .WAV files."
   },
   {
     "objectID": "posts/penguins-blog-post/index.html",
