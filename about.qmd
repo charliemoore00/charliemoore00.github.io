@@ -10,7 +10,7 @@ about:
     - icon: github
       text: Github
       href: https://github.com/charliemoore00
-    - icon: website
+    - icon: person-workspace
       text: Website
       href: https://www.charlie-moore.com
 
